@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新NISA 運用シミュレーター | Money Dash</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230D1B2A'/><text x='50' y='57' font-size='36' text-anchor='middle' font-family='Arial' font-weight='bold' fill='%23FFD700'>MD</text><line x1='20' y1='67' x2='80' y2='67' stroke='%23FFD700' stroke-width='4' stroke-linecap='round'/></svg>">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4P1NTQCQPX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4P1NTQCQPX');
+    </script>
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-light: #ecfdf5;
+            --secondary: #1e40af;
+            --bg: #f0f9ff;
+            --card-bg: rgba(255,255,255,0.95);
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        .back-link {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .back-link:hover { color: var(--primary); }
+
+        .header-area { margin-bottom: 24px; }
+        .header-area h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .header-area p { color: var(--text-sub); margin-bottom: 12px; }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid white;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 0;
+        }
+        @media (max-width: 768px) {
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+        input[type="number"]:focus, select:focus { border-color: var(--primary); }
+        input[type="range"] { width: 100%; margin-top: 6px; accent-color: var(--primary); }
+        .unit { color: var(--text-sub); white-space: nowrap; font-size: 0.9rem; }
+
+        .error-msg {
+            background: #fef2f2;
+            color: #dc2626;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+        .warning-msg {
+            background: #fffbeb;
+            color: #92400e;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.82rem;
+            margin-bottom: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: var(--bg);
+            padding: 14px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        .stat-label { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 4px; }
+        .stat-value { font-size: 1.1rem; font-weight: bold; color: var(--primary); }
+        .stat-value.accent { color: var(--secondary); }
+
+        .chart-container { position: relative; height: 260px; }
+
+        .section-title { font-size: 1.05rem; font-weight: bold; margin-bottom: 16px; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+        }
+        .info-item { background: var(--bg); border-radius: 14px; padding: 16px; }
+        .info-item-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+        .info-item-body { font-size: 0.82rem; color: var(--text-sub); line-height: 1.5; }
+
+        .cta-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+        .cta-button {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            background: linear-gradient(135deg, #059669, #10b981);
+            transition: opacity 0.2s;
+        }
+        .cta-button:hover { opacity: 0.9; }
+
+        .disclaimer {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="index.html" class="back-link">← ツール一覧に戻る</a>
+
+    <div class="header-area">
+        <h1>新NISA 運用シミュレーター</h1>
+        <p>2024年からの恒久化・無期限制度に対応。非課税の複利効果を課税口座と比較します。</p>
+        <span class="badge">2024年新制度対応</span>
+    </div>
+
+    <!-- シミュレーターの見方ガイド -->
+    <div class="glass-card" style="padding: 20px; margin-bottom: 24px; border-left: 4px solid var(--secondary);">
+        <p class="section-title" style="margin-bottom: 8px; font-size: 0.95rem;">📊 シミュレーターの計算ルール</p>
+        <ul style="font-size: 0.85rem; color: var(--text-sub); list-style: none; padding-left: 4px;">
+            <li style="margin-bottom: 8px;">✅ <b>積立の自動停止</b>：元本合計が非課税限度額（<b>最大1,800万円、成長投資枠のみは1,200万円</b>）に達すると自動で積立を停止し、その後は運用のみ継続します。</li>
+            <li style="margin-bottom: 8px;">✅ <b>生涯投資枠の上限</b>：生涯投資枠は<b>最大1,800万円</b>です。ただし、成長投資枠の使用は<b>最大1,200万円</b>に制限されます。</li>
+            <li style="margin-bottom: 8px;">✅ <b>枠の併用挙動</b>：月額30万円（併用）設定時、成長枠が1,200万円に達した後はつみたて枠のみで1,800万円に達するまで積立を継続します。</li>
+            <li>✅ <b>青色の点線（課税口座）</b>：NISAを使わずに運用した場合、<b>「その年にすべて売却して現金化した際の手残り額」</b>を表示しています。NISAとの差が、本来引かれるはずの税金（節税効果）です。</li>
+        </ul>
+    </div>
+
+    <div class="grid-layout">
+        <!-- 入力 -->
+        <div class="glass-card">
+            <div class="input-group">
+                <label for="monthly">月額積立額</label>
+                <div class="input-row">
+                    <input type="number" id="monthly" value="30000" min="1000" max="300000" step="1000">
+                    <span class="unit">円</span>
+                </div>
+                <input type="range" id="monthly-range" min="1000" max="300000" step="1000" value="30000">
+            </div>
+
+            <div class="input-group">
+                <label for="frame">投資枠</label>
+                <select id="frame">
+                    <option value="tsumitate">つみたて投資枠（上限 月10万円）</option>
+                    <option value="growth">成長投資枠（上限 月20万円）</option>
+                    <option value="both" selected>両方フル活用（上限 月30万円）</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>積立年数：<span id="years-label">20</span>年</label>
+                <input type="range" id="years" min="1" max="40" step="1" value="20">
+            </div>
+
+            <div class="input-group">
+                <label>想定年利回り：<span id="rate-label">5.0</span>%</label>
+                <input type="range" id="rate" min="0" max="10" step="0.1" value="5">
+            </div>
+
+            <div id="error-msg" class="error-msg" style="display:none;"></div>
+        </div>
+
+        <!-- 結果 -->
+        <div class="glass-card">
+            <div id="warning-msg" class="warning-msg" style="display:none;"></div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">NISA最終資産</div>
+                    <div class="stat-value" id="stat-total">—</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">投資元本</div>
+                    <div class="stat-value" id="stat-principal">—</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">非課税運用益</div>
+                    <div class="stat-value" id="stat-profit">—</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">NISAによる節税額</div>
+                    <div class="stat-value accent" id="stat-tax-saved">—</div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 仕組み説明 -->
+    <div class="glass-card">
+        <div class="section-title">新NISAの仕組み</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-item-title">📊 年間投資枠</div>
+                <div class="info-item-body">つみたて投資枠120万円＋成長投資枠240万円＝合計年360万円まで非課税で投資できます。</div>
+            </div>
+            <div class="info-item">
+                <div class="info-item-title">🏦 生涯非課税限度額</div>
+                <div class="info-item-body">生涯で1,800万円（うち成長投資枠は1,200万円まで）が上限。売却すると翌年に枠が復活します。</div>
+            </div>
+            <div class="info-item">
+                <div class="info-item-title">💰 非課税のメリット</div>
+                <div class="info-item-body">通常は売却益・配当に約20.315%の税がかかりますが、NISA口座内では一切課税されません。</div>
+            </div>
+            <div class="info-item">
+                <div class="info-item-title">🔓 いつでも引き出せる</div>
+                <div class="info-item-body">iDeCoと異なり原則60歳まで引き出せない制約がなく、緊急時や目標達成時にいつでも売却できます。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-container">
+        <a href="#AFFILIATE_URL_SBI" class="cta-button">SBI証券でNISAを始める</a>
+        <a href="#AFFILIATE_URL_RAKUTEN" class="cta-button" style="background: linear-gradient(135deg, #dc2626, #ef4444);">楽天証券でNISAを始める</a>
+    </div>
+
+    <p class="disclaimer">
+        本ツールは一般的な情報提供を目的としており、投資助言ではありません。計算結果はあくまでシミュレーションであり、実際の運用結果を保証するものではありません。税制・制度は変更される場合があります。投資判断はご自身の責任で行い、必要に応じて専門家にご相談ください。
+    </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script>
+    const LIFETIME_LIMIT = 18000000;
+    const TAX_RATE = 0.20315;
+    const FRAME_LIMITS = { tsumitate: 100000, growth: 200000, both: 300000 };
+
+    let myChart = null;
+
+    function formatYen(num) {
+        const abs = Math.abs(Math.round(num));
+        if (abs >= 10000) {
+            return Math.round(num / 10000).toLocaleString('ja-JP') + '万円';
+        }
+        return Math.round(num).toLocaleString('ja-JP') + '円';
+    }
+
+    // 数値入力とスライダーを同期させる汎用関数
+    function syncInput(sourceId, targetId, isLabel = false) {
+        const source = document.getElementById(sourceId);
+        const target = document.getElementById(targetId);
+        if (isLabel) target.textContent = source.value;
+        else target.value = source.value;
+    }
+
+    // 選択した枠に応じて入力上限を更新する関数
+    function updateInputConstraints() {
+        const frame = document.getElementById('frame').value;
+        const limit = FRAME_LIMITS[frame];
+        const monthlyInput = document.getElementById('monthly');
+        const monthlyRange = document.getElementById('monthly-range');
+
+        monthlyInput.max = limit;
+        monthlyRange.max = limit;
+
+        if (parseInt(monthlyInput.value) > limit) {
+            monthlyInput.value = limit;
+            monthlyRange.value = limit;
+        }
+    }
+
+    function calculate() {
+        const monthly = parseFloat(document.getElementById('monthly').value) || 0;
+        const frame = document.getElementById('frame').value;
+        const years = parseInt(document.getElementById('years').value) || 1;
+        const annualRate = parseFloat(document.getElementById('rate').value) / 100;
+
+        const errorEl = document.getElementById('error-msg');
+        const warningEl = document.getElementById('warning-msg');
+        const frameLimit = FRAME_LIMITS[frame];
+
+        // 新NISAの制度上限
+        const LIFETIME_TOTAL_LIMIT = 18000000;
+        const LIFETIME_GROWTH_LIMIT = 12000000;
+
+        if (monthly > frameLimit) {
+            errorEl.textContent = `選択した枠の月額上限は ${formatYen(frameLimit)} です。`;
+            errorEl.style.display = 'block';
+            document.getElementById('stat-total').textContent = '—';
+            document.getElementById('stat-principal').textContent = '—';
+            document.getElementById('stat-profit').textContent = '—';
+            document.getElementById('stat-tax-saved').textContent = '—';
+            if (myChart) myChart.destroy();
+            return;
+        }
+        errorEl.style.display = 'none';
+
+        const monthlyRate = annualRate / 12;
+        const totalMonths = years * 12;
+
+        const labels = ['0年'];
+        const principalArr = [0];
+        const nisaArr = [0];
+        const taxedArr = [0];
+        const grossTaxableArr = [0]; // 課税口座の税引前評価額を記録
+
+        let nisaBalance = 0;
+        let taxedBalance = 0;
+        let nisaContributedTotal = 0;
+        let nisaContributedGrowth = 0;
+
+        // 毎月の枠ごとの配分（併用時はつみたて10万・成長20万を上限に振り分け）
+        let monthlyTsum = 0;
+        let monthlyGrowth = 0;
+        if (frame === 'tsumitate') {
+            monthlyTsum = monthly;
+        } else if (frame === 'growth') {
+            monthlyGrowth = monthly;
+        } else {
+            monthlyTsum = Math.min(monthly, 100000);
+            monthlyGrowth = monthly - monthlyTsum;
+        }
+
+        for (let m = 1; m <= totalMonths; m++) {
+            // 成長枠の積立可能額（1,200万枠と1,800万総枠のどちらか早い方で止まる）
+            let actualGrowth = Math.min(monthlyGrowth, LIFETIME_GROWTH_LIMIT - nisaContributedGrowth, LIFETIME_TOTAL_LIMIT - nisaContributedTotal);
+            // つみたて枠の積立可能額
+            let actualTsum = Math.min(monthlyTsum, LIFETIME_TOTAL_LIMIT - (nisaContributedTotal + actualGrowth));
+            
+            let contrib = actualGrowth + actualTsum;
+            nisaContributedTotal += contrib;
+            nisaContributedGrowth += actualGrowth;
+            
+            // NISAと課税口座を同じ拠出ルールで計算（公平な比較のため）
+            nisaBalance = nisaBalance * (1 + monthlyRate) + contrib;
+            taxedBalance = taxedBalance * (1 + monthlyRate) + contrib;
+
+            if (m % 12 === 0) {
+                const yr = m / 12;
+                labels.push(yr + '年');
+                // 投資元本（生涯投資枠1,800万に達した後は増えない）
+                principalArr.push(Math.round(nisaContributedTotal));
+                nisaArr.push(Math.round(nisaBalance));
+                grossTaxableArr.push(Math.round(taxedBalance));
+
+                // 課税口座：運用中は非課税だが、比較のため「売却時の手残り額」を算出
+                const currentProfit = Math.max(0, taxedBalance - nisaContributedTotal);
+                taxedArr.push(Math.round(nisaContributedTotal + currentProfit * (1 - TAX_RATE)));
+            }
+        }
+
+        const finalNisa = nisaArr[nisaArr.length - 1];
+        const finalPrincipal = Math.round(nisaContributedTotal);
+        const finalProfit = finalNisa - finalPrincipal;
+        const finalTaxed = taxedArr[taxedArr.length - 1];
+        const benefit = finalNisa - finalTaxed;
+        
+        document.getElementById('stat-total').textContent = formatYen(finalNisa);
+        document.getElementById('stat-principal').textContent = formatYen(finalPrincipal);
+        document.getElementById('stat-profit').textContent = formatYen(Math.max(0, finalProfit));
+        document.getElementById('stat-tax-saved').textContent = formatYen(Math.max(0, benefit));
+
+        // 生涯上限警告
+        const totalInvest = monthly * 12 * years;
+        const relevantLimit = (frame === 'growth') ? LIFETIME_GROWTH_LIMIT : LIFETIME_TOTAL_LIMIT;
+        if (totalInvest > relevantLimit) {
+            warningEl.textContent = `総投資予定額（${formatYen(totalInvest)}）が非課税限度額（${formatYen(relevantLimit)}）を超えます。超過分はNISA口座に入らず、運用のみ継続される計算です。`;
+            warningEl.style.display = 'block';
+        } else {
+            warningEl.style.display = 'none';
+        }
+
+        updateChart(labels, principalArr, nisaArr, taxedArr, grossTaxableArr);
+    }
+
+    function updateChart(labels, principal, nisa, taxed, grossTaxable) {
+        const ctx = document.getElementById('chart').getContext('2d');
+        if (myChart) myChart.destroy();
+
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: 'NISA資産（非課税手残り）',
+                        data: nisa,
+                        borderColor: '#059669', 
+                        backgroundColor: 'rgba(5,150,105,0.08)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 0,
+                        borderWidth: 2,
+                    },
+                    {
+                        label: '課税口座（売却時の手残り）', 
+                        data: taxed,
+                        borderColor: '#1e40af',
+                        borderDash: [5, 4],
+                        fill: false,
+                        tension: 0.3,
+                        pointRadius: 0,
+                        borderWidth: 2,
+                    },
+                    {
+                        label: '元本',
+                        data: principal,
+                        borderColor: '#94a3b8',
+                        borderDash: [3, 3],
+                        fill: false,
+                        tension: 0,
+                        pointRadius: 0,
+                        borderWidth: 1.5,
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 14, font: { size: 11 } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => {
+                                let val = ctx.raw;
+                                let label = ` ${ctx.dataset.label}: ${formatYen(val)}`;
+                                
+                                if (ctx.dataset.label.includes('課税口座')) {
+                                    const idx = ctx.dataIndex;
+                                    if (grossTaxable[idx] && principal[idx]) {
+                                        const profit = Math.max(0, grossTaxable[idx] - principal[idx]);
+                                        const tax = profit * TAX_RATE;
+                                        if (tax > 0) {
+                                            label += ` (課税額: ${formatYen(tax)})`;
+                                        }
+                                    }
+                                } else if (ctx.dataset.label.includes('NISA')) {
+                                    label += ` (課税額: 0円)`;
+                                }
+                                return label;
+                            }
+                        },
+                        footer: (items) => { // ツールチップに補足説明を追加
+                            return '※ 課税口座は、その年に解約・売却したと仮定した場合の税引後の金額を表示しています。';
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: v => Math.round(v / 10000) + '万',
+                            font: { size: 11 }
+                        }
+                    },
+                    x: { ticks: { font: { size: 11 } } }
+                }
+            }
+        });
+    }
+
+    // Sync inputs and sliders
+    const monthlyInput = document.getElementById('monthly');
+    const monthlyRange = document.getElementById('monthly-range');
+    const yearsRange = document.getElementById('years');
+    const rateRange = document.getElementById('rate');
+
+    const inputs = [
+        { src: 'monthly', tgt: 'monthly-range' },
+        { src: 'monthly-range', tgt: 'monthly' },
+        { src: 'years', tgt: 'years-label', isLabel: true },
+        { src: 'rate', tgt: 'rate-label', isLabel: true }
+    ];
+
+    inputs.forEach(pair => {
+        document.getElementById(pair.src).addEventListener('input', () => {
+            syncInput(pair.src, pair.tgt, pair.isLabel);
+            calculate();
+        });
+    });
+
+    document.getElementById('frame').addEventListener('change', () => {
+        updateInputConstraints();
+        calculate();
+    });
+
+    updateInputConstraints();
+    calculate();
+</script>
+</body>
+</html>
