@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iDeCo節税シミュレーター</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230D1B2A'/><text x='50' y='57' font-size='36' text-anchor='middle' font-family='Arial' font-weight='bold' fill='%23FFD700'>MD</text><line x1='20' y1='67' x2='80' y2='67' stroke='%23FFD700' stroke-width='4' stroke-linecap='round'/></svg>">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4P1NTQCQPX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4P1NTQCQPX');
+    </script>
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-light: #ecfdf5;
+            --secondary: #1e40af;
+            --bg: #f0f9ff;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid white;
+            margin-bottom: 24px;
+        }
+
+        .header-area {
+            margin-bottom: 24px;
+        }
+
+        .header-area h1 {
+            margin: 0 0 8px 0;
+            font-size: 1.5rem;
+        }
+
+        .header-area p {
+            color: var(--text-sub);
+            margin: 0;
+        }
+
+        .badge {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .cta-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .cta-button {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+
+        .disclaimer {
+            margin-top: 32px;
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .info-item {
+            background: var(--bg);
+            border-radius: 14px;
+            padding: 18px;
+        }
+
+        .info-item-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .info-item-body {
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            line-height: 1.7;
+        }
+
+        .info-warn {
+            font-size: 0.78rem;
+            color: #dc2626;
+            margin-top: 6px;
+        }
+
+        .section-heading {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0 0 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-link">← ツール一覧</a>
+
+    <div class="glass-card header-area">
+        <h1>iDeCo節税シミュレーター</h1>
+        <p>拠出額を入力して、節税効果を可視化しましょう。</p>
+        <span class="badge">リアルタイム計算</span>
+    </div>
+
+    <div class="glass-card">
+        <p class="section-heading">iDeCoの節税のしくみ</p>
+        <p style="font-size:0.82rem;color:var(--text-sub);margin:0 0 4px;">計算結果を読む前に、制度の概要を確認してください。</p>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-item-title">💰 掛金は全額所得控除</div>
+                <div class="info-item-body">毎月の拠出額が「小規模企業共済等掛金控除」として所得から差し引かれ、所得税・住民税が軽減されます。</div>
+            </div>
+            <div class="info-item">
+                <div class="info-item-title">📅 節税の反映タイミング</div>
+                <div class="info-item-body">
+                    <b>所得税</b>：当年（年末調整または確定申告で還付）<br>
+                    <b>住民税</b>：翌年6月以降の天引き額が減る形で反映
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-item-title">🏦 受取時の課税</div>
+                <div class="info-item-body">退職所得控除（一時金）または公的年金等控除（年金）が適用されます。加入年数・金額によっては実質非課税になるケースも。</div>
+                <div class="info-warn">⚠️ 2026年1月以降、「60歳でiDeCo受取・65歳で退職金受取」のような場合、控除が一部使えなくなります。受取タイミングは事前に確認を。</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="input-group">
+            <label>年収（万円）: <span id="val-income">500</span></label>
+            <input type="range" id="input-income" min="100" max="2000" step="10" value="500">
+            <div style="margin-top:6px; font-size:0.8rem; color:var(--text-sub);">年収が高いほど所得税率が上がり、節税効果が大きくなります。</div>
+        </div>
+
+        <div class="input-group">
+            <label>拠出区分</label>
+            <select id="select-type">
+                <option value="23000">会社員（企業年金なし）：上限2.3万円</option>
+                <option value="12000">会社員（企業年金あり・DB）：上限1.2万円</option>
+                <option value="20000">会社員（企業年金あり・DC）：上限2.0万円</option>
+                <option value="12000">公務員：上限1.2万円</option>
+                <option value="68000">自営業・フリーランス：上限6.8万円</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>月額拠出額（円）: <span id="val-monthly">23,000</span></label>
+            <input type="range" id="input-monthly" min="5000" max="68000" step="1000" value="23000">
+            <div style="margin-top:8px; padding:10px 14px; background:var(--primary-light); border-radius:10px; font-size:0.875rem; color:var(--primary); font-weight:600;">
+                節税後の実質負担：<span id="res-monthly-actual">—</span> 円/月
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>積立年数（年）: <span id="val-years">20</span></label>
+            <input type="range" id="input-years" min="1" max="40" value="20">
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">年間節税額</div>
+                <div class="stat-value" id="res-annual-tax">0円</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">累計節税額</div>
+                <div class="stat-value" id="res-total-tax">0円</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">累計拠出総額</div>
+                <div class="stat-value" id="res-total-contrib">0円</div>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="cta-container">
+            <a href="#AFFILIATE_URL_SBI" class="cta-button">iDeCoを始めるなら：SBI証券で口座開設</a>
+            <a href="#AFFILIATE_URL_RAKUTEN" class="cta-button" style="background: linear-gradient(135deg, #dc2626, #ef4444);">楽天証券でiDeCo口座を開く</a>
+        </div>
+        <p class="disclaimer">
+            本ツールの計算結果は概算です。社会保険料は実際の加入状況により異なります。<br>
+            投資・税務の判断はご自身の責任で行い、必要に応じて税理士等の専門家にご相談ください。
+        </p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+
+<script>
+    const elIncome = document.getElementById('input-income');
+    const elType = document.getElementById('select-type');
+    const elMonthly = document.getElementById('input-monthly');
+    const elYears = document.getElementById('input-years');
+
+    let myChart;
+
+    function getEmploymentIncomeDeduction(income) {
+        if (income <= 1625000) return 550000;
+        if (income <= 1800000) return income * 0.4 - 100000;
+        if (income <= 3600000) return income * 0.3 + 80000;
+        if (income <= 6600000) return income * 0.2 + 440000;
+        if (income <= 8500000) return income * 0.1 + 1100000;
+        return 1950000;
+    }
+
+    function getSocialInsurance(income, isSelfEmployed) {
+        if (isSelfEmployed) return 35000 * 12;
+        return income * 0.145;
+    }
+
+    function getIncomeTax(taxableIncome) {
+        if (taxableIncome <= 0) return 0;
+        let rate = 0;
+        let deduct = 0;
+        if (taxableIncome <= 1950000) { rate = 0.05; deduct = 0; }
+        else if (taxableIncome <= 3300000) { rate = 0.10; deduct = 97500; }
+        else if (taxableIncome <= 6950000) { rate = 0.20; deduct = 427500; }
+        else if (taxableIncome <= 9000000) { rate = 0.23; deduct = 636000; }
+        else if (taxableIncome <= 18000000) { rate = 0.33; deduct = 1536000; }
+        else if (taxableIncome <= 40000000) { rate = 0.40; deduct = 2796000; }
+        else { rate = 0.45; deduct = 4796000; }
+        let tax = taxableIncome * rate - deduct;
+        if (tax < 0) tax = 0;
+        return Math.floor(tax * 1.021);
+    }
+
+    function calculate() {
+        const income = parseInt(elIncome.value) * 10000;
+        const typeLimit = parseInt(elType.value);
+        const monthly = parseInt(elMonthly.value);
+        const years = parseInt(elYears.value);
+        const isSelfEmployed = (elType.options[elType.selectedIndex].text.includes('自営業'));
+
+        document.getElementById('val-income').innerText = elIncome.value;
+        document.getElementById('val-monthly').innerText = monthly.toLocaleString();
+        document.getElementById('val-years').innerText = years;
+
+        elMonthly.max = typeLimit;
+        if (monthly > typeLimit) {
+            elMonthly.value = typeLimit;
+        }
+
+        const empDeduction = getEmploymentIncomeDeduction(income);
+        const socialIns = getSocialInsurance(income, isSelfEmployed);
+        const basicDeduction = 480000;
+
+        const taxableBase = Math.max(0, income - empDeduction - socialIns - basicDeduction);
+
+        const taxWithoutIncome = getIncomeTax(taxableBase);
+        const taxWithoutRes = Math.floor(taxableBase * 0.1);
+        const totalTaxWithout = taxWithoutIncome + taxWithoutRes;
+
+        const yearlyIdec = monthly * 12;
+        const taxableWithIdec = Math.max(0, taxableBase - yearlyIdec);
+        const taxWithIncome = getIncomeTax(taxableWithIdec);
+        const taxWithRes = Math.floor(taxableWithIdec * 0.1);
+        const totalTaxWith = taxWithIncome + taxWithRes;
+
+        const annualSavings = totalTaxWithout - totalTaxWith;
+
+        document.getElementById('res-annual-tax').innerText = annualSavings.toLocaleString() + '円';
+        document.getElementById('res-total-tax').innerText = (annualSavings * years).toLocaleString() + '円';
+        document.getElementById('res-total-contrib').innerText = (yearlyIdec * years).toLocaleString() + '円';
+
+        const monthlyActual = Math.round(monthly - annualSavings / 12);
+        document.getElementById('res-monthly-actual').innerText = monthlyActual.toLocaleString();
+
+        updateChart(years, yearlyIdec, annualSavings);
+    }
+
+    function updateChart(years, yearlyContrib, yearlySavings) {
+        const labels = [];
+        const contribData = [];
+        const costData = [];
+
+        for(let i=0; i<=years; i++) {
+            labels.push(i + '年');
+            contribData.push(yearlyContrib * i);
+            costData.push((yearlyContrib - yearlySavings) * i);
+        }
+
+        if (myChart) {
+            myChart.data.labels = labels;
+            myChart.data.datasets[0].data = contribData;
+            myChart.data.datasets[1].data = costData;
+            myChart.update();
+        } else {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: '累計拠出額', data: contribData, borderColor: '#1e40af', backgroundColor: 'rgba(30, 64, 175, 0.1)', fill: true },
+                        { label: '累計手出し額（節税後）', data: costData, borderColor: '#059669', backgroundColor: 'rgba(5, 150, 105, 0.1)', fill: true }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+    }
+
+    [elIncome, elType, elMonthly, elYears].forEach(el => {
+        el.addEventListener('input', calculate);
+    });
+
+    calculate();
+</script>
+
+</body>
+</html>
