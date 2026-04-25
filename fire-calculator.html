@@ -45,12 +45,20 @@
     .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--secondary); }
     
     canvas { margin-top: 20px; max-height: 400px; }
+    .site-nav { position:sticky; top:0; z-index:100; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(248,250,252,0.82); border-bottom:1px solid rgba(226,232,240,0.7); height:48px; display:flex; align-items:center; gap:10px; padding:0 8px; margin-bottom:20px; }
+    .nav-logo { background:#0D1B2A; color:#FFD700; font-weight:800; font-size:0.7rem; letter-spacing:0.5px; padding:4px 8px; border-radius:6px; text-decoration:none; flex-shrink:0; }
+    .nav-sep { color:#e2e8f0; font-size:1rem; line-height:1; }
+    .nav-current { color:#1e293b; font-size:0.85rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <a href="index.html" style="display:inline-block; margin-bottom:16px; font-size:0.875rem; color:#64748b; text-decoration:none;">← ツール一覧</a>
+    <nav class="site-nav">
+        <a href="index.html" class="nav-logo">MD</a>
+        <span class="nav-sep">/</span>
+        <span class="nav-current">FIREシミュレーター</span>
+    </nav>
     <div class="glass-card">
 
         <div class="header-area">
@@ -250,6 +258,19 @@ update();
 </script>
 
 <div style="max-width:1000px;margin:0 auto;padding:0 20px 32px;">
+<div style="padding:20px 0 16px;border-top:1px solid #e2e8f0;">
+    <p style="font-size:0.7rem;font-weight:700;color:#94a3b8;margin:0 0 12px;letter-spacing:0.08em;text-transform:uppercase;">関連ツール</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
+        <a href="montecarlo.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
+            <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">🎲</span>
+            <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">モンテカルロシミュレーター</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">1,000回試算でFIRE後の耐久性を検証</div></div>
+        </a>
+        <a href="lifeevent-fire.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
+            <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">📅</span>
+            <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">ライフイベント込みFIRE</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">積立〜FIRE〜取り崩しを一気通貫で</div></div>
+        </a>
+    </div>
+</div>
 <p style="font-size:0.75rem;color:#64748b;text-align:center;line-height:1.6;margin:0;">本ツールの計算結果は概算であり、将来の結果を保証するものではありません。<br>投資・税務・保険等の判断はご自身の責任で行い、必要に応じて専門家にご相談ください。</p>
 </div>
 

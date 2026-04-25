@@ -353,13 +353,21 @@
         .aff-btn:hover { background: var(--accent); color: white; }
 
         .footer-copy { font-size: 0.75rem; color: var(--text-muted); }
+        .site-nav { position:sticky; top:0; z-index:100; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(249,250,251,0.88); border-bottom:1px solid rgba(229,231,235,0.8); height:48px; display:flex; align-items:center; gap:10px; padding:0 8px; margin-bottom:16px; }
+        .nav-logo { background:#0D1B2A; color:#FFD700; font-weight:800; font-size:0.7rem; letter-spacing:0.5px; padding:4px 8px; border-radius:6px; text-decoration:none; flex-shrink:0; }
+        .nav-sep { color:#e5e7eb; font-size:1rem; line-height:1; }
+        .nav-current { color:#1f2937; font-size:0.85rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <a href="index.html" class="back-link">← ツール一覧に戻る</a>
+        <nav class="site-nav">
+            <a href="index.html" class="nav-logo">MD</a>
+            <span class="nav-sep">/</span>
+            <span class="nav-current">資産リバランス計算機</span>
+        </nav>
         <h1>資産リバランス計算機</h1>
         <p class="subtitle">目標比率と現在の保有額から、売買・追加投資の調整案を算出します</p>
     </header>
@@ -765,7 +773,20 @@
     calculate();
 </script>
 
-<div style="max-width:1000px;margin:0 auto;padding:0 20px 32px;">
+<div style="max-width:900px;margin:0 auto;padding:0 20px 32px;">
+<div style="padding:20px 0 16px;border-top:1px solid #e5e7eb;">
+    <p style="font-size:0.7rem;font-weight:700;color:#94a3b8;margin:0 0 12px;letter-spacing:0.08em;text-transform:uppercase;">関連ツール</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
+        <a href="dividend-portfolio.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
+            <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">💹</span>
+            <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">配当ポートフォリオ計算機</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">銘柄ごとの配当を集計・目標月収を算出</div></div>
+        </a>
+        <a href="nisa.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
+            <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">📈</span>
+            <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">新NISA運用シミュレーター</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">1,800万非課税枠の複利効果を可視化</div></div>
+        </a>
+    </div>
+</div>
 <p style="font-size:0.75rem;color:#64748b;text-align:center;line-height:1.6;margin:0;">本ツールの計算結果は概算であり、将来の結果を保証するものではありません。<br>投資・税務・保険等の判断はご自身の責任で行い、必要に応じて専門家にご相談ください。</p>
 </div>
 
