@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資産リバランス計算機 — Money Dash</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230D1B2A'/><text x='50' y='57' font-size='36' text-anchor='middle' font-family='Arial' font-weight='bold' fill='%23FFD700'>MD</text><line x1='20' y1='67' x2='80' y2='67' stroke='%23FFD700' stroke-width='4' stroke-linecap='round'/></svg>">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4P1NTQCQPX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4P1NTQCQPX');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"
+            integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ"
+            crossorigin="anonymous"></script>
+
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --accent: #059669;
+            --accent-hover: #047857;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --danger: #dc2626;
+            --info: #2563eb;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        header { margin-bottom: 24px; }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        h1 { font-size: 1.5rem; margin: 0 0 4px; }
+
+        .subtitle { font-size: 0.875rem; color: var(--text-muted); margin: 0; }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr auto;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: end;
+        }
+
+        @media (max-width: 600px) {
+            .input-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .input-row .col-name { grid-column: 1 / -1; }
+            .input-row .col-del  { grid-column: 2; justify-self: end; }
+        }
+
+        label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        input:focus { outline: 2px solid var(--accent); border-color: transparent; }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: opacity 0.15s, background-color 0.15s;
+        }
+
+        .btn-add {
+            background-color: var(--accent);
+            color: white;
+            padding: 8px 18px;
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+        .btn-add:hover { background-color: var(--accent-hover); }
+
+        .btn-del {
+            background-color: #f3f4f6;
+            color: var(--text-muted);
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            line-height: 1;
+        }
+        .btn-del:hover { background-color: #fee2e2; color: var(--danger); }
+
+        .ratio-total-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            font-size: 0.875rem;
+        }
+
+        .ratio-badge { font-weight: 700; padding: 2px 10px; border-radius: 20px; }
+        .ratio-badge.ok   { background: #d1fae5; color: #065f46; }
+        .ratio-badge.warn { background: #fee2e2; color: var(--danger); }
+
+        .investment-row {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            max-width: 320px;
+        }
+
+        .summary-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .total-amount { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+
+        /* ── プリセット ── */
+        .preset-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preset-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .preset-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .btn-preset {
+            background: #f3f4f6;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            line-height: 1.4;
+            text-align: left;
+        }
+
+        .btn-preset:hover {
+            background: #d1fae5;
+            border-color: var(--accent);
+            color: #065f46;
+        }
+
+        .btn-preset .preset-name { font-weight: 700; display: block; }
+        .btn-preset .preset-desc { font-size: 0.72rem; color: var(--text-muted); }
+        .btn-preset:hover .preset-desc { color: #065f46; }
+
+        /* ── グラフエリア ── */
+        .charts-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 4px 0 20px;
+        }
+
+        .chart-wrap {
+            flex: 1;
+            max-width: 260px;
+            text-align: center;
+        }
+
+        .chart-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+        }
+
+        .chart-canvas-wrap {
+            position: relative;
+            height: 200px;
+        }
+
+        .chart-arrow {
+            font-size: 1.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            flex-shrink: 0;
+            line-height: 1;
+            padding-bottom: 24px; /* align with canvas center */
+        }
+
+        @media (max-width: 500px) {
+            .charts-row { flex-direction: column; gap: 8px; }
+            .chart-arrow { padding-bottom: 0; font-size: 1.4rem; transform: rotate(90deg); }
+            .chart-canvas-wrap { height: 160px; }
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px 18px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+
+        .legend-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        /* ── テーブル ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            margin-bottom: 4px;
+        }
+
+        th, td {
+            text-align: right;
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        th { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        th:first-child, td:first-child { text-align: left; }
+
+        .diff-plus    { color: var(--danger); font-weight: 600; }
+        .diff-minus   { color: var(--info);   font-weight: 600; }
+        .diff-neutral { color: var(--text-muted); }
+
+        /* ── アクションセクション ── */
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+            margin: 28px 0 6px;
+        }
+
+        .section-note { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 12px; }
+
+        .action-item {
+            padding: 10px 14px;
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .action-name { font-weight: 600; }
+        .action-sub  { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+        .action-buy  { color: var(--info);   font-weight: 700; }
+        .action-sell { color: var(--danger); font-weight: 700; }
+        .action-add  { color: var(--accent); font-weight: 700; }
+
+        .empty-msg { font-size: 0.875rem; color: var(--text-muted); padding: 8px 0; }
+
+        .warning-box {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 0.875rem;
+            color: #9a3412;
+            display: none;
+            margin-bottom: 16px;
+        }
+
+        footer {
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            text-align: center;
+        }
+
+        .affiliate-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .aff-btn {
+            display: inline-block;
+            background: white;
+            border: 1.5px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: background 0.15s, color 0.15s;
+        }
+        .aff-btn:hover { background: var(--accent); color: white; }
+
+        .footer-copy { font-size: 0.75rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="index.html" class="back-link">← ツール一覧に戻る</a>
+        <h1>資産リバランス計算機</h1>
+        <p class="subtitle">目標比率と現在の保有額から、売買・追加投資の調整案を算出します</p>
+    </header>
+
+    <div class="card">
+        <div class="preset-section">
+            <span class="preset-label">参考ポートフォリオから読み込む（目標比率と資産名をセット）</span>
+            <div class="preset-buttons">
+                <button class="btn-preset" onclick="loadPreset(0)">
+                    <span class="preset-name">GPIF</span>
+                    <span class="preset-desc">国内株・外国株・国内債・外国債 各25%</span>
+                </button>
+                <button class="btn-preset" onclick="loadPreset(1)">
+                    <span class="preset-name">バフェット推奨</span>
+                    <span class="preset-desc">米国株90% + 短期国債10%</span>
+                </button>
+                <button class="btn-preset" onclick="loadPreset(2)">
+                    <span class="preset-name">オールウェザー（ダリオ）</span>
+                    <span class="preset-desc">株30・長期債40・中期債15・金7.5・コモ7.5%</span>
+                </button>
+                <button class="btn-preset" onclick="loadPreset(3)">
+                    <span class="preset-name">パーマネント（ブラウン）</span>
+                    <span class="preset-desc">株・長期債・現金・金 各25%</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="asset-inputs"></div>
+        <button class="btn-add" onclick="addAssetRow()">＋ 資産を追加</button>
+
+        <div class="ratio-total-row">
+            <span>目標比率の合計：</span>
+            <span id="ratio-badge" class="ratio-badge ok">100%</span>
+            <span id="ratio-warning-text" style="color:var(--danger);display:none;">← 100% にしてください</span>
+        </div>
+
+        <div class="investment-row">
+            <label for="investment-amount">追加投資額（円）</label>
+            <input type="number" id="investment-amount" value="0" min="0" oninput="calculate()">
+        </div>
+    </div>
+
+    <div id="results" class="card" style="display:none;">
+        <div class="summary-box">
+            <span>現在の総資産額</span>
+            <span class="total-amount" id="total-val-display">0円</span>
+        </div>
+
+        <div id="ratio-mismatch-warning" class="warning-box">
+            目標比率の合計が100%でないため、結果は参考値です。
+        </div>
+
+        <!-- As-Is / To-Be グラフ -->
+        <div class="charts-row">
+            <div class="chart-wrap">
+                <div class="chart-title">現状 (As-Is)</div>
+                <div class="chart-canvas-wrap">
+                    <canvas id="chart-asis"></canvas>
+                </div>
+            </div>
+            <div class="chart-arrow">→</div>
+            <div class="chart-wrap">
+                <div class="chart-title">目標 (To-Be)</div>
+                <div class="chart-canvas-wrap">
+                    <canvas id="chart-tobe"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="chart-legend" class="chart-legend"></div>
+
+        <!-- 比較テーブル -->
+        <div style="overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>資産名</th>
+                        <th>評価額</th>
+                        <th>現在比率</th>
+                        <th>目標比率</th>
+                        <th>乖離 (GAP)</th>
+                    </tr>
+                </thead>
+                <tbody id="comparison-table"></tbody>
+            </table>
+        </div>
+
+        <div class="section-title">追加投資だけで調整する案（ノーセル）</div>
+        <p class="section-note">売却なし。追加投資を不足している資産へ優先配分します。</p>
+        <div id="no-sell-actions"></div>
+
+        <div class="section-title">売買込みで完全調整する案</div>
+        <p class="section-note">追加投資額を含む総資産で目標比率を達成するための売買額。</p>
+        <div id="full-rebalance-actions"></div>
+    </div>
+
+    <footer>
+        <div class="affiliate-links">
+            <a href="#AFFILIATE_URL_SBI" class="aff-btn">SBI証券で口座開設（無料）</a>
+            <a href="#AFFILIATE_URL_RAKUTEN" class="aff-btn">楽天証券で口座開設（無料）</a>
+        </div>
+        <p class="footer-copy">&copy; 2026 Money Dash — money-dash.com</p>
+    </footer>
+</div>
+
+<script>
+    const PRESETS = [
+        {
+            name: 'GPIF',
+            assets: [
+                { name: '国内株式',   ratio: 25 },
+                { name: '外国株式',   ratio: 25 },
+                { name: '国内債券',   ratio: 25 },
+                { name: '外国債券',   ratio: 25 },
+            ]
+        },
+        {
+            name: 'バフェット推奨',
+            assets: [
+                { name: '米国株式（S&P500）', ratio: 90 },
+                { name: '短期米国債',         ratio: 10 },
+            ]
+        },
+        {
+            name: 'オールウェザー（ダリオ）',
+            assets: [
+                { name: '米国株式',     ratio: 30 },
+                { name: '長期米国債',   ratio: 40 },
+                { name: '中期米国債',   ratio: 15 },
+                { name: 'ゴールド',     ratio: 7.5 },
+                { name: 'コモディティ', ratio: 7.5 },
+            ]
+        },
+        {
+            name: 'パーマネント（ブラウン）',
+            assets: [
+                { name: '株式',     ratio: 25 },
+                { name: '長期国債', ratio: 25 },
+                { name: '現金',     ratio: 25 },
+                { name: 'ゴールド', ratio: 25 },
+            ]
+        },
+    ];
+
+    function loadPreset(i) {
+        assets = PRESETS[i].assets.map(a => ({ ...a, value: 0 }));
+        renderInputs();
+        calculate();
+    }
+
+    const PALETTE = [
+        '#3b82f6', '#f59e0b', '#10b981', '#f43f5e',
+        '#8b5cf6', '#06b6d4', '#84cc16', '#fb923c'
+    ];
+
+    let assets = [
+        { name: '国内株式',   ratio: 50, value: 500000 },
+        { name: '先進国株式', ratio: 30, value: 250000 },
+        { name: '国内債券',   ratio: 10, value: 120000 },
+        { name: '現金',       ratio: 10, value: 130000 }
+    ];
+
+    let chartAsis = null;
+    let chartTobe = null;
+
+    function fmt(n) { return Math.round(n).toLocaleString() + '円'; }
+
+    function colors(n) { return Array.from({ length: n }, (_, i) => PALETTE[i % PALETTE.length]); }
+
+    // ── グラフ更新 ──────────────────────────────────────────
+    function updateCharts(totalValue) {
+        const labels   = assets.map(a => a.name);
+        const bgColors = colors(assets.length);
+
+        const asisData = assets.map(a =>
+            totalValue > 0 ? parseFloat((a.value / totalValue * 100).toFixed(2)) : 0
+        );
+        const tobeData = assets.map(a => a.ratio);
+
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '58%',
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`
+                    }
+                }
+            }
+        };
+
+        if (chartAsis) {
+            chartAsis.data.labels = labels;
+            chartAsis.data.datasets[0].data = asisData;
+            chartAsis.data.datasets[0].backgroundColor = bgColors;
+            chartAsis.update();
+        } else {
+            chartAsis = new Chart(document.getElementById('chart-asis'), {
+                type: 'doughnut',
+                data: {
+                    labels,
+                    datasets: [{ data: asisData, backgroundColor: bgColors, borderWidth: 2, borderColor: '#fff' }]
+                },
+                options: commonOptions
+            });
+        }
+
+        if (chartTobe) {
+            chartTobe.data.labels = labels;
+            chartTobe.data.datasets[0].data = tobeData;
+            chartTobe.data.datasets[0].backgroundColor = bgColors;
+            chartTobe.update();
+        } else {
+            chartTobe = new Chart(document.getElementById('chart-tobe'), {
+                type: 'doughnut',
+                data: {
+                    labels,
+                    datasets: [{ data: tobeData, backgroundColor: bgColors, borderWidth: 2, borderColor: '#fff' }]
+                },
+                options: commonOptions
+            });
+        }
+
+        // 凡例（両グラフ共通）
+        const legendEl = document.getElementById('chart-legend');
+        legendEl.innerHTML = labels.map((l, i) => `
+            <div class="legend-item">
+                <div class="legend-dot" style="background:${bgColors[i]}"></div>
+                <span>${l}</span>
+            </div>
+        `).join('');
+    }
+
+    // ── 入力描画 ────────────────────────────────────────────
+    function renderInputs() {
+        const container = document.getElementById('asset-inputs');
+        container.innerHTML = '';
+        assets.forEach((asset, i) => {
+            const row = document.createElement('div');
+            row.className = 'input-row';
+            row.innerHTML = `
+                <div class="col-name">
+                    ${i === 0 ? '<label>資産名</label>' : ''}
+                    <input type="text" value="${asset.name}" oninput="updateData(${i},'name',this.value)">
+                </div>
+                <div>
+                    ${i === 0 ? '<label>目標比率(%)</label>' : ''}
+                    <input type="number" value="${asset.ratio}" min="0" max="100"
+                           oninput="updateData(${i},'ratio',this.value)">
+                </div>
+                <div>
+                    ${i === 0 ? '<label>現在評価額(円)</label>' : ''}
+                    <input type="number" value="${asset.value}" min="0"
+                           oninput="updateData(${i},'value',this.value)">
+                </div>
+                <div class="col-del">
+                    <button class="btn-del" onclick="removeAssetRow(${i})" title="削除">✕</button>
+                </div>
+            `;
+            container.appendChild(row);
+        });
+    }
+
+    function addAssetRow() {
+        assets.push({ name: '新しい資産', ratio: 0, value: 0 });
+        renderInputs();
+        calculate();
+    }
+
+    function removeAssetRow(i) {
+        if (assets.length <= 1) return;
+        assets.splice(i, 1);
+        renderInputs();
+        calculate();
+    }
+
+    function updateData(i, field, value) {
+        assets[i][field] = field === 'name' ? value : Math.max(0, parseFloat(value) || 0);
+        calculate();
+    }
+
+    // ── 計算・描画 ──────────────────────────────────────────
+    function calculate() {
+        const investment = Math.max(0, parseFloat(document.getElementById('investment-amount').value) || 0);
+        const totalValue = assets.reduce((s, a) => s + a.value, 0);
+        const totalRatio = assets.reduce((s, a) => s + a.ratio, 0);
+        const newTotal   = totalValue + investment;
+        const ratioOk    = Math.abs(totalRatio - 100) < 0.01;
+
+        // 比率バッジ
+        const badge = document.getElementById('ratio-badge');
+        badge.textContent = totalRatio.toFixed(1).replace('.0', '') + '%';
+        badge.className = 'ratio-badge ' + (ratioOk ? 'ok' : 'warn');
+        document.getElementById('ratio-warning-text').style.display = ratioOk ? 'none' : 'inline';
+
+        // 結果エリア表示
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('total-val-display').textContent = fmt(totalValue);
+        document.getElementById('ratio-mismatch-warning').style.display = ratioOk ? 'none' : 'block';
+
+        // グラフ更新（表示後に呼ぶ）
+        updateCharts(totalValue);
+
+        // 比較テーブル
+        const tbody = document.getElementById('comparison-table');
+        tbody.innerHTML = '';
+        assets.forEach((a, i) => {
+            const cur  = totalValue > 0 ? (a.value / totalValue) * 100 : 0;
+            const diff = cur - a.ratio;
+            let diffClass = 'diff-neutral';
+            if (diff > 0.05)  diffClass = 'diff-plus';
+            if (diff < -0.05) diffClass = 'diff-minus';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <span style="display:inline-block;width:10px;height:10px;border-radius:2px;
+                                 background:${PALETTE[i % PALETTE.length]};margin-right:6px;vertical-align:middle;"></span>
+                    ${a.name}
+                </td>
+                <td>${fmt(a.value)}</td>
+                <td>${cur.toFixed(1)}%</td>
+                <td>${a.ratio}%</td>
+                <td class="${diffClass}">${diff > 0.05 ? '+' : ''}${diff.toFixed(1)}%</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // ── 完全調整案 ──
+        const fullEl = document.getElementById('full-rebalance-actions');
+        fullEl.innerHTML = '';
+        let hasAction = false;
+        assets.forEach(a => {
+            const ideal = newTotal * (a.ratio / 100);
+            const diff  = ideal - a.value;
+            if (Math.abs(diff) < 1) return;
+            hasAction = true;
+            const item = document.createElement('div');
+            item.className = 'action-item';
+            const cls  = diff > 0 ? 'action-buy' : 'action-sell';
+            const verb = diff > 0 ? '購入' : '売却';
+            item.innerHTML = `
+                <div>
+                    <div class="action-name">${a.name}</div>
+                    <div class="action-sub">目標額: ${fmt(ideal)}</div>
+                </div>
+                <span class="${cls}">${verb} ${fmt(Math.abs(diff))}</span>
+            `;
+            fullEl.appendChild(item);
+        });
+        if (!hasAction) {
+            fullEl.innerHTML = '<p class="empty-msg">すでに目標比率に達しています。売買不要です。</p>';
+        }
+
+        // ── ノーセル案 ──
+        const noSellEl = document.getElementById('no-sell-actions');
+        noSellEl.innerHTML = '';
+
+        if (investment <= 0) {
+            noSellEl.innerHTML = '<p class="empty-msg">追加投資額を入力すると配分案を表示します。</p>';
+            return;
+        }
+
+        const deficits = assets
+            .map((a, i) => ({ i, name: a.name, gap: newTotal * (a.ratio / 100) - a.value, value: a.value }))
+            .filter(d => d.gap > 1);
+
+        if (deficits.length === 0) {
+            noSellEl.innerHTML = '<p class="empty-msg">全資産が目標比率を超えています。完全調整案をご確認ください。</p>';
+            return;
+        }
+
+        const totalDeficit = deficits.reduce((s, d) => s + d.gap, 0);
+        const allocatable  = Math.min(investment, totalDeficit);
+        const unallocated  = investment - allocatable;
+
+        deficits.forEach(d => {
+            const amount    = Math.round(allocatable * (d.gap / totalDeficit));
+            if (amount <= 0) return;
+            const postRatio = newTotal > 0 ? ((d.value + amount) / newTotal) * 100 : 0;
+            const item = document.createElement('div');
+            item.className = 'action-item';
+            item.innerHTML = `
+                <div>
+                    <div class="action-name">${d.name}</div>
+                    <div class="action-sub">追加後比率: ${postRatio.toFixed(1)}%（目標: ${assets[d.i].ratio}%）</div>
+                </div>
+                <span class="action-add">追加 ${fmt(amount)}</span>
+            `;
+            noSellEl.appendChild(item);
+        });
+
+        if (unallocated > 1) {
+            const note = document.createElement('p');
+            note.className = 'empty-msg';
+            note.style.marginTop = '8px';
+            note.textContent = `残り ${fmt(unallocated)} は全資産が目標比率を超えるため自動配分できません。完全調整案をご参照ください。`;
+            noSellEl.appendChild(note);
+        }
+    }
+
+    renderInputs();
+    calculate();
+</script>
+
+</body>
+</html>
