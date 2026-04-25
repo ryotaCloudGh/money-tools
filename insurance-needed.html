@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>必要保障額シミュレーター | Money Dash</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230D1B2A'/><text x='50' y='57' font-size='36' text-anchor='middle' font-family='Arial' font-weight='bold' fill='%23FFD700'>MD</text><line x1='20' y1='67' x2='80' y2='67' stroke='%23FFD700' stroke-width='4' stroke-linecap='round'/></svg>">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4P1NTQCQPX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4P1NTQCQPX');
+    </script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --secondary: #1e40af;
+            --bg: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
+            --accent: #10b981;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        .back-link {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .back-link:hover { color: var(--primary); }
+
+        .header-area { margin-bottom: 24px; }
+        .header-area h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .header-area p { color: var(--text-sub); margin-bottom: 12px; }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid white;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 768px) {
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+
+        .input-group { margin-bottom: 16px; }
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+        input:focus { border-color: var(--primary); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        .stat-label { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 4px; }
+        .stat-value { font-size: 1.3rem; font-weight: bold; color: var(--secondary); }
+
+        .chart-container { position: relative; height: 350px; }
+
+        .cta-button {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            background: linear-gradient(135deg, #059669, #10b981);
+            margin-top: 16px;
+        }
+
+        .footer-note {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            text-align: center;
+            margin-top: 32px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="index.html" class="back-link">← ツール一覧に戻る</a>
+
+    <div class="header-area">
+        <h1>必要保障額シミュレーター</h1>
+        <p>自分に万が一のことがあった場合、家族が生活していくために必要な「生命保険」の額を計算します。</p>
+        <span class="badge">精密ライフプランニング</span>
+    </div>
+
+    <div class="grid-layout">
+        <div class="glass-card">
+            <h3 style="margin-bottom:16px; font-size:1.1rem;">1. 支出の入力（万が一の後）</h3>
+            <div class="input-group">
+                <label>家族の生活費（月額/万円）</label>
+                <input type="number" id="monthly_spend" value="20">
+                <p style="font-size:0.7rem; color:var(--text-sub);">※現在の支出の70%程度が目安</p>
+            </div>
+            <div class="input-group">
+                <label>保障が必要な期間（年）</label>
+                <input type="number" id="duration" value="20">
+                <p style="font-size:0.7rem; color:var(--text-sub);">※末子が独立するまでの年数など</p>
+            </div>
+            <div class="input-group">
+                <label>教育費の予備（合計/万円）</label>
+                <input type="number" id="edu_cost" value="1000">
+            </div>
+            <div class="input-group">
+                <label>葬儀・片付け・予備費（合計/万円）</label>
+                <input type="number" id="extra_cost" value="300">
+            </div>
+
+            <h3 style="margin:24px 0 16px; font-size:1.1rem;">2. 収入・資産の入力</h3>
+            <div class="input-group">
+                <label>現在の貯蓄額（万円）</label>
+                <input type="number" id="savings" value="500">
+            </div>
+            <div class="input-group">
+                <label>住宅ローン残高（万円）</label>
+                <input type="number" id="mortgage" value="2000">
+                <p style="font-size:0.7rem; color:var(--text-sub);">※団信加入済みなら 0 と入力</p>
+            </div>
+            <div class="input-group">
+                <label>配偶者の年収見込（万円）</label>
+                <input type="number" id="partner_income" value="100">
+            </div>
+            <div class="input-group">
+                <label>遺族年金の区分</label>
+                <select id="pension_type">
+                    <option value="150">会社員（遺族基礎＋厚生年金）</option>
+                    <option value="100">自営業（遺族基礎年金のみ）</option>
+                    <option value="0">なし</option>
+                </select>
+                <p style="font-size:0.7rem; color:var(--text-sub);">※目安：会社員150万、自営業100万程度</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="glass-card">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">現時点の必要保障額</div>
+                        <div class="stat-value" id="res_total">-- 万円</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">総支出見込</div>
+                        <div class="stat-value" style="color:var(--text-main)" id="res_exp">-- 万円</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="neededChart"></canvas>
+                </div>
+
+                <div style="margin-top:20px; font-size:0.85rem; color:var(--text-sub);">
+                    必要保障額は、年数の経過（子供の成長など）とともに<strong>三角形のように減っていきます</strong>。
+                    これを「四角い保険（終身保険）」ではなく「三角の保険（収入保障保険）」で準備すると、保険料を安く抑えられます。
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <p style="font-size:0.9rem; font-weight:bold; margin-bottom:12px;">保険料を最適化するなら</p>
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <a href="#AFFILIATE_URL_SBI" class="cta-button" style="flex:1; margin-top:0; font-size:0.85rem;">SBIマネープラザで相談</a>
+                    <a href="#AFFILIATE_URL_RAKUTEN" class="cta-button" style="flex:1; margin-top:0; font-size:0.85rem; background:linear-gradient(135deg, #bf0000, #ef4444);">楽天保険の総合窓口</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card" style="margin-top:8px;">
+        <h3 style="font-size:1.05rem; margin-bottom:20px;">必要保障額の考え方</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px;">
+            <div style="background:var(--bg); border-radius:12px; padding:16px;">
+                <div style="font-size:1.4rem; margin-bottom:8px;">📐</div>
+                <div style="font-weight:bold; font-size:0.9rem; margin-bottom:6px;">「三角形」の保険が合理的</div>
+                <div style="font-size:0.8rem; color:var(--text-sub);">必要保障額は子どもの成長・ローン返済とともに年々減少します。定額の終身保険より、保険金が逓減する「収入保障保険」の方が保険料を安く抑えられます。</div>
+            </div>
+            <div style="background:var(--bg); border-radius:12px; padding:16px;">
+                <div style="font-size:1.4rem; margin-bottom:8px;">🏛️</div>
+                <div style="font-weight:bold; font-size:0.9rem; margin-bottom:6px;">公的遺族年金を忘れずに</div>
+                <div style="font-size:0.8rem; color:var(--text-sub);">会社員が亡くなった場合、遺族基礎年金＋遺族厚生年金で年間100〜200万円程度が受給できます。これを差し引くと必要な民間保険は大幅に減ります。</div>
+            </div>
+            <div style="background:var(--bg); border-radius:12px; padding:16px;">
+                <div style="font-size:1.4rem; margin-bottom:8px;">🏠</div>
+                <div style="font-weight:bold; font-size:0.9rem; margin-bottom:6px;">団信加入なら住宅ローンは0</div>
+                <div style="font-size:0.8rem; color:var(--text-sub);">住宅ローンに付帯する団体信用生命保険（団信）に加入していれば、死亡時にローン残高が全額免除されます。その分だけ必要保障額は減ります。</div>
+            </div>
+            <div style="background:var(--bg); border-radius:12px; padding:16px;">
+                <div style="font-size:1.4rem; margin-bottom:8px;">📉</div>
+                <div style="font-weight:bold; font-size:0.9rem; margin-bottom:6px;">FIREを目指すなら保険は削れる</div>
+                <div style="font-size:0.8rem; color:var(--text-sub);">資産が積み上がるほど必要保障額は減ります。金融資産が十分になれば保険は不要になる場合も。保険料を投資に回す判断の目安としてこのシミュレーターを活用してください。</div>
+            </div>
+        </div>
+    </div>
+
+    <p class="footer-note">
+        本シミュレーションは入力された条件に基づく概算です。正確な遺族年金額はねんきん定期便等をご確認ください。<br>
+        © 2026 Money Dash — money-dash.com
+    </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script>
+    let myChart = null;
+
+    function calculate() {
+        const monthlySpend = parseFloat(document.getElementById('monthly_spend').value) || 0;
+        const duration = parseInt(document.getElementById('duration').value) || 0;
+        const eduCost = parseFloat(document.getElementById('edu_cost').value) || 0;
+        const extraCost = parseFloat(document.getElementById('extra_cost').value) || 0;
+        const savings = parseFloat(document.getElementById('savings').value) || 0;
+        const mortgage = parseFloat(document.getElementById('mortgage').value) || 0;
+        const partnerIncome = parseFloat(document.getElementById('partner_income').value) || 0;
+        const pensionAnnual = parseFloat(document.getElementById('pension_type').value) || 0;
+
+        const labels = [];
+        const coverageData = [];
+        const incomeData = [];
+
+        let initialNeeded = 0;
+        let totalExp = 0;
+
+        for (let y = 0; y <= duration; y++) {
+            labels.push(y + "年目");
+            
+            // 残りの期間の生活費
+            const remainingLifeCost = monthlySpend * 12 * (duration - y);
+            // 教育費（徐々に減ると仮定）
+            const remainingEdu = Math.max(0, eduCost * (1 - y / duration));
+            
+            // 総支出 = 生活費 + 教育費 + 予備費 + 住宅ローン残高（初年度のみ）
+            const exp = remainingLifeCost + remainingEdu + (y === 0 ? extraCost + mortgage : 0);
+            
+            // 総収入見込 = 遺族年金 + 配偶者収入
+            const inc = (pensionAnnual + partnerIncome) * (duration - y);
+            
+            // 必要保障額 = 支出 - (収入 + 貯蓄)
+            const needed = Math.max(0, exp - (inc + savings));
+            
+            coverageData.push(Math.round(needed));
+            
+            if (y === 0) {
+                initialNeeded = needed;
+                totalExp = exp;
+            }
+        }
+
+        document.getElementById('res_total').innerText = Math.round(initialNeeded).toLocaleString() + " 万円";
+        document.getElementById('res_exp').innerText = Math.round(totalExp).toLocaleString() + " 万円";
+
+        updateChart(labels, coverageData);
+    }
+
+    function updateChart(labels, data) {
+        const ctx = document.getElementById('neededChart').getContext('2d');
+        if (myChart) myChart.destroy();
+
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '必要保障額（万円）',
+                    data: data,
+                    borderColor: '#1e40af',
+                    backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                    fill: true,
+                    tension: 0.1,
+                    pointRadius: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => ` 必要保障額: ${ctx.raw.toLocaleString()} 万円`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: '万円' },
+                        ticks: {
+                            callback: (v) => v.toLocaleString()
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const inputs = ['monthly_spend', 'duration', 'edu_cost', 'extra_cost', 'savings', 'mortgage', 'partner_income', 'pension_type'];
+    inputs.forEach(id => {
+        document.getElementById(id).addEventListener('input', calculate);
+    });
+
+    window.onload = calculate;
+</script>
+</body>
+</html>
