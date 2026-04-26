@@ -49,6 +49,10 @@
                     <div class="input-group"><label>固定資産税 (年/万円)</label><input type="number" id="tax" value="15" oninput="calculate()"></div>
                     <div class="input-group"><label>売却想定価格 (万円)</label><input type="number" id="salePrice" value="3500" oninput="calculate()"></div>
                 </div>
+                <div class="mt-4 p-3 bg-blue-50 rounded-lg text-sm">
+                    <span class="text-gray-500">月々の返済額</span>
+                    <span class="font-bold text-blue-600 float-right" id="monthlyRepaymentNote">-</span>
+                </div>
             </div>
 
             <div class="card p-6">
@@ -78,7 +82,9 @@
                 <div class="card p-5">
                     <p class="text-sm font-semibold text-gray-500 mb-3">購入</p>
                     <div class="space-y-2 text-sm">
-                        <div class="flex justify-between"><span class="text-gray-500">累積コスト</span><span class="font-bold" id="buyCumCost">-</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">累積コスト（売却前）</span><span class="font-bold" id="buyCumCostRaw">-</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">売却想定価格</span><span class="font-bold text-green-600" id="salePriceNote">-</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">累積コスト（売却後）</span><span class="font-bold" id="buyCumCost">-</span></div>
                         <div class="flex justify-between"><span class="text-gray-500">差額運用益</span><span class="font-bold text-green-600" id="buyInvestNote">-</span></div>
                         <div class="border-t pt-2 flex justify-between"><span class="text-gray-700 font-semibold">累積コスト（運用考慮後）</span><span class="font-bold text-blue-600 text-lg" id="buyTotal">-</span></div>
                     </div>

@@ -79,6 +79,9 @@ function calculate() {
     const finalBuyCost  = cumulativeBuy  - buyInvest  - salePrice;
     const finalRentCost = cumulativeRent - rentInvest;
 
+    document.getElementById('monthlyRepaymentNote').innerText = Math.round(monthlyRepayment * 10) / 10 + ' 万円';
+    document.getElementById('buyCumCostRaw').innerText  = Math.round(cumulativeBuy).toLocaleString() + ' 万円';
+    document.getElementById('salePriceNote').innerText  = '− ' + salePrice.toLocaleString() + ' 万円';
     document.getElementById('buyCumCost').innerText  = Math.round(cumulativeBuy - salePrice).toLocaleString() + ' 万円';
     document.getElementById('rentCumCost').innerText = Math.round(cumulativeRent).toLocaleString() + ' 万円';
     document.getElementById('buyInvestNote').innerText  = Math.round(buyInvest).toLocaleString() + ' 万円';
