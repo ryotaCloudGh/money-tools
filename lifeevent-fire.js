@@ -201,7 +201,15 @@ function updateImpactSummary(inputs, paths, baseSuccessCount) {
         const sign = diff >= 0 ? '+' : '';
         const color = diff >= 0 ? 'var(--danger-color)' : 'var(--success-color)';
         const div = document.createElement('div');
-        div.innerHTML = `・ <strong>${ev.name}</strong>（${ev.age}歳 / ${ev.amount > 0 ? '+' : ''}${ev.amount}万円）: 成功率への影響 <strong style="color:${color}">${sign}${diff}%</strong>`;
+        const safeName = document.createElement('strong');
+        safeName.textContent = ev.name;
+        const impact = document.createElement('strong');
+        impact.style.color = color;
+        impact.textContent = `${sign}${diff}%`;
+        div.appendChild(document.createTextNode('・ '));
+        div.appendChild(safeName);
+        div.appendChild(document.createTextNode(`（${ev.age}歳 / ${ev.amount > 0 ? '+' : ''}${ev.amount}万円）: 成功率への影響 `));
+        div.appendChild(impact);
         container.appendChild(div);
     });
 }
