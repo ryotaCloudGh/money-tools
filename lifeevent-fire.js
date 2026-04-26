@@ -165,10 +165,22 @@ function runSimulation() {
     const p50 = getPercentileLine(simWith.allHistories, simWith.yearsCount, 0.5);
     const p90 = getPercentileLine(simWith.allHistories, simWith.yearsCount, 0.9);
 
-    document.getElementById('probWithEvents').textContent     = `${(simWith.successCount    / ITER * 100).toFixed(1)}%`;
+    const rateWith    = simWith.successCount    / ITER * 100;
+    const rateWithout = simWithout.successCount / ITER * 100;
+
+    function successColor(rate) {
+        if (rate >= 80) return '#dcfce7';
+        if (rate >= 50) return '#fef9c3';
+        return '#fee2e2';
+    }
+
+    document.getElementById('probWithEvents').textContent     = `${rateWith.toFixed(1)}%`;
     document.getElementById('countWithEvents').textContent    = `(${ITER}回中${simWith.successCount}回成功)`;
-    document.getElementById('probWithoutEvents').textContent  = `${(simWithout.successCount / ITER * 100).toFixed(1)}%`;
+    document.getElementById('probWithoutEvents').textContent  = `${rateWithout.toFixed(1)}%`;
     document.getElementById('countWithoutEvents').textContent = `(${ITER}回中${simWithout.successCount}回成功)`;
+
+    document.getElementById('probWithEvents').closest('.stat-box').style.background    = successColor(rateWith);
+    document.getElementById('probWithoutEvents').closest('.stat-box').style.background = successColor(rateWithout);
 
     updateChart(labels, p10, p50, p90, inputs);
     updateImpactSummary(inputs, paths, simWith.successCount);
