@@ -16,6 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"
             integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="common.css">
     <style>
         :root {
             --primary-color: #059669;
@@ -25,142 +26,33 @@
             --text-main: #1f2937;
             --border-color: #e5e7eb;
         }
-
-        body {
-            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        header {
-            margin-bottom: 24px;
-        }
-
-        .back-link {
-            text-decoration: none;
-            color: #64748b;
-            font-size: 0.9rem;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            margin: 0;
-            color: var(--primary-color);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 768px) {
-            .grid {
-                grid-template-columns: 320px 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 24px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
-        }
-
-        button {
-            width: 100%;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .result-summary {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #ecfdf5;
-            border-radius: 8px;
-        }
-
-        .success-rate {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 400px;
-            width: 100%;
-        }
-        .site-nav { position:sticky; top:0; z-index:100; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(248,250,252,0.82); border-bottom:1px solid rgba(226,232,240,0.7); height:48px; display:flex; align-items:center; gap:10px; padding:0 8px; margin-bottom:12px; }
-        .nav-logo { background:#0D1B2A; color:#FFD700; font-weight:800; font-size:0.7rem; letter-spacing:0.5px; padding:4px 8px; border-radius:6px; text-decoration:none; flex-shrink:0; }
-        .nav-sep { color:#e2e8f0; font-size:1rem; line-height:1; }
-        .nav-current { color:#1e293b; font-size:0.85rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { font-size: 1.5rem; margin: 0 0 24px; color: var(--primary-color); }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .grid { grid-template-columns: 320px 1fr; } }
+        .card { background: var(--card-bg); padding: 24px; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 16px; }
+        label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 4px; }
+        input { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 1rem; box-sizing: border-box; }
+        input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(5,150,105,0.2); }
+        button { width: 100%; background-color: var(--primary-color); color: white; border: none; padding: 12px; border-radius: 4px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        button:hover { background-color: var(--primary-hover); }
+        .result-summary { text-align: center; margin-bottom: 20px; padding: 15px; background: #ecfdf5; border-radius: 8px; }
+        .success-rate { font-size: 2rem; font-weight: bold; color: var(--primary-color); }
+        .chart-container { position: relative; height: 400px; width: 100%; }
     </style>
 </head>
 <body>
 
+<nav class="site-nav">
+    <a href="index.html" class="nav-logo">MD</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">モンテカルロFIREシミュレーター</span>
+</nav>
+
 <div class="container">
-    <header>
-        <nav class="site-nav">
-            <a href="index.html" class="nav-logo">MD</a>
-            <span class="nav-sep">/</span>
-            <span class="nav-current">モンテカルロFIREシミュレーター</span>
-        </nav>
-        <h1>モンテカルロFIREシミュレーター</h1>
-    </header>
+    <h1>モンテカルロFIREシミュレーター</h1>
 
     <div style="margin-bottom:20px; padding:16px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe; font-size:0.875rem; color:#1e40af; line-height:1.7;">
         <strong>モンテカルロシミュレーションとは？</strong><br>
@@ -171,27 +63,15 @@
 
     <div class="grid">
         <aside class="card">
-            <div class="input-group">
-                <label for="currentAsset">現在資産 (万円)</label>
-                <input type="number" id="currentAsset" value="5000">
-            </div>
-            <div class="input-group">
-                <label for="annualSpending">年間支出 (万円)</label>
-                <input type="number" id="annualSpending" value="200">
-            </div>
-            <div class="input-group">
-                <label for="expectedReturn">期待利回り (%)</label>
-                <input type="number" step="0.1" id="expectedReturn" value="5">
-            </div>
+            <div class="input-group"><label for="currentAsset">現在資産 (万円)</label><input type="number" id="currentAsset" value="5000"></div>
+            <div class="input-group"><label for="annualSpending">年間支出 (万円)</label><input type="number" id="annualSpending" value="200"></div>
+            <div class="input-group"><label for="expectedReturn">期待利回り (%)</label><input type="number" step="0.1" id="expectedReturn" value="5"></div>
             <div class="input-group">
                 <label for="risk">利回りの標準偏差 (%)</label>
                 <input type="number" step="0.1" id="risk" value="15">
                 <div style="font-size:0.75rem; color:#6b7280; margin-top:4px;">目安：全世界株 15%／日本株 20%／バランス型 10%</div>
             </div>
-            <div class="input-group">
-                <label for="years">シミュレーション年数</label>
-                <input type="number" id="years" value="30">
-            </div>
+            <div class="input-group"><label for="years">シミュレーション年数</label><input type="number" id="years" value="30"></div>
             <button id="runBtn">シミュレーション実行</button>
         </aside>
 
@@ -224,205 +104,40 @@
         </main>
     </div>
 
-    <div style="margin-top:24px; padding:24px; background:#f8fafc; border-radius:16px; border:1px solid #e2e8f0;">
-        <p style="margin:0 0 4px; font-size:0.75rem; font-weight:700; color:#64748b; letter-spacing:0.05em;">SPONSORED</p>
-        <p style="margin:0 0 16px; font-size:0.95rem; font-weight:600; color:#1e293b;">この結果をもとに、口座開設から始めよう</p>
-        <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <a href="#AFFILIATE_URL_SBI" target="_blank" rel="noopener"
-               style="flex:1; min-width:200px; display:block; padding:14px 20px; background:#ff6600; color:white; border-radius:10px; text-decoration:none; text-align:center; font-weight:700; font-size:0.9rem;">
-                SBI証券で口座開設（無料）→
+    <div class="affiliate-section" style="margin-top:24px;">
+        <p class="affiliate-label">SPONSORED</p>
+        <p class="affiliate-title">この結果をもとに、口座開設から始めよう</p>
+        <div class="affiliate-buttons">
+            <a href="#AFFILIATE_URL_SBI" target="_blank" rel="noopener" class="affiliate-btn affiliate-btn-sbi">SBI証券で口座開設（無料）→</a>
+            <a href="#AFFILIATE_URL_RAKUTEN" target="_blank" rel="noopener" class="affiliate-btn affiliate-btn-rakuten">楽天証券で口座開設（無料）→</a>
+        </div>
+        <p class="affiliate-note">※ 当サイトはアフィリエイト広告を利用しています</p>
+    </div>
+</div>
+
+<script src="montecarlo.js"></script>
+
+<div class="related-tools-wrap" style="max-width:900px;">
+    <div class="related-tools-inner">
+        <p class="related-tools-title">関連ツール</p>
+        <div class="related-tools-grid">
+            <a href="fire-calculator.html" class="related-tool-card">
+                <span class="related-tool-icon">🔥</span>
+                <div>
+                    <div class="related-tool-name">FIREシミュレーター</div>
+                    <div class="related-tool-desc">資産寿命をインフレ・税金込みで計算</div>
+                </div>
             </a>
-            <a href="#AFFILIATE_URL_RAKUTEN" target="_blank" rel="noopener"
-               style="flex:1; min-width:200px; display:block; padding:14px 20px; background:#bf0000; color:white; border-radius:10px; text-decoration:none; text-align:center; font-weight:700; font-size:0.9rem;">
-                楽天証券で口座開設（無料）→
+            <a href="lifeevent-fire.html" class="related-tool-card">
+                <span class="related-tool-icon">📅</span>
+                <div>
+                    <div class="related-tool-name">ライフイベント込みFIRE</div>
+                    <div class="related-tool-desc">積立〜FIRE〜取り崩しを一気通貫で</div>
+                </div>
             </a>
         </div>
-        <p style="margin:12px 0 0; font-size:0.75rem; color:#94a3b8;">※ 当サイトはアフィリエイト広告を利用しています</p>
     </div>
-</div>
-
-<script>
-    const STORAGE_KEY = 'montecarlo_sim_input_data';
-    let myChart = null;
-
-    function randomNormal(mean, stdDev) {
-        const u = 1 - Math.random();
-        const v = 1 - Math.random();
-        const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-        return mean + z * stdDev;
-    }
-
-    function saveInputs() {
-        const inputs = {
-            currentAsset: document.getElementById('currentAsset').value,
-            annualSpending: document.getElementById('annualSpending').value,
-            expectedReturn: document.getElementById('expectedReturn').value,
-            risk: document.getElementById('risk').value,
-            years: document.getElementById('years').value
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(inputs));
-    }
-
-    function loadInputs() {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            const data = JSON.parse(saved);
-            Object.keys(data).forEach(key => {
-                if (document.getElementById(key)) {
-                    document.getElementById(key).value = data[key];
-                }
-            });
-        }
-    }
-
-    function runSimulation() {
-        saveInputs();
-
-        const initialAsset = parseFloat(document.getElementById('currentAsset').value);
-        const spending = parseFloat(document.getElementById('annualSpending').value);
-        const meanReturn = parseFloat(document.getElementById('expectedReturn').value) / 100;
-        const stdDev = parseFloat(document.getElementById('risk').value) / 100;
-        const years = parseInt(document.getElementById('years').value);
-        const iterations = 1000;
-
-        let allResults = [];
-        let successCount = 0;
-
-        for (let i = 0; i < iterations; i++) {
-            let history = [initialAsset];
-            let currentAsset = initialAsset;
-
-            for (let y = 1; y <= years; y++) {
-                const yearlyReturn = randomNormal(meanReturn, stdDev);
-                // 資産を先に運用してから支出（年末取り崩しモデル）
-                currentAsset = currentAsset * (1 + yearlyReturn) - spending;
-                if (currentAsset < 0) currentAsset = 0;
-                history.push(currentAsset);
-            }
-
-            if (currentAsset > 0) successCount++;
-            allResults.push(history);
-        }
-
-        const successRate = ((successCount / iterations) * 100).toFixed(1);
-        document.getElementById('successRateDisplay').textContent = `${successRate} %`;
-        document.getElementById('successCountDisplay').textContent = `${successCount} / ${iterations} 回成功`;
-
-        const labels = Array.from({length: years + 1}, (_, i) => `${i}年目`);
-        const percentiles = [10, 50, 90].map(p => {
-            return labels.map((_, yearIdx) => {
-                const valuesAtYear = allResults.map(h => h[yearIdx]).sort((a, b) => a - b);
-                const index = Math.floor(p / 100 * iterations);
-                return valuesAtYear[index];
-            });
-        });
-
-        updateChart(labels, percentiles);
-
-        // チェックボックスのOFF状態を復元
-        [0, 1, 2].forEach(i => {
-            const cb = document.getElementById(`cb${i}`);
-            if (cb && !cb.checked) {
-                myChart.getDatasetMeta(i).hidden = true;
-            }
-        });
-        myChart.update();
-    }
-
-    function updateChart(labels, percentileData) {
-        const ctx = document.getElementById('fireChart').getContext('2d');
-
-        if (myChart) {
-            myChart.destroy();
-        }
-
-        myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: '好調シナリオ（10%の確率でこの水準以上）',
-                        data: percentileData[2],
-                        borderColor: '#10b981',
-                        backgroundColor: 'transparent',
-                        borderDash: [5, 5],
-                        borderWidth: 2,
-                        pointRadius: 0
-                    },
-                    {
-                        label: '中央値（50%の確率でこの水準）',
-                        data: percentileData[1],
-                        borderColor: '#059669',
-                        backgroundColor: 'rgba(5, 150, 105, 0.1)',
-                        fill: true,
-                        borderWidth: 3,
-                        pointRadius: 0
-                    },
-                    {
-                        label: '不調シナリオ（10%の確率でこの水準以下）',
-                        data: percentileData[0],
-                        borderColor: '#ef4444',
-                        backgroundColor: 'transparent',
-                        borderDash: [2, 2],
-                        borderWidth: 2,
-                        pointRadius: 0
-                    },
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: '資産額 (万円)'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-    }
-
-    function toggleDataset(index) {
-        if (!myChart) return;
-        const meta = myChart.getDatasetMeta(index);
-        meta.hidden = !meta.hidden;
-        myChart.update();
-    }
-
-    document.getElementById('runBtn').addEventListener('click', runSimulation);
-
-    window.onload = () => {
-        loadInputs();
-        runSimulation();
-    };
-</script>
-
-<div style="max-width:1000px;margin:0 auto;padding:0 20px 32px;">
-<div style="padding:20px 0 16px;border-top:1px solid #e2e8f0;">
-    <p style="font-size:0.7rem;font-weight:700;color:#94a3b8;margin:0 0 12px;letter-spacing:0.08em;text-transform:uppercase;">関連ツール</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
-        <a href="fire-calculator.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
-            <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">🔥</span>
-            <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">FIREシミュレーター</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">資産寿命をインフレ・税金込みで計算</div></div>
-        </a>
-        <a href="lifeevent-fire.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
-            <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">📅</span>
-            <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">ライフイベント込みFIRE</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">積立〜FIRE〜取り崩しを一気通貫で</div></div>
-        </a>
-    </div>
-</div>
-<p style="font-size:0.75rem;color:#64748b;text-align:center;line-height:1.6;margin:0;">本ツールの計算結果は概算であり、将来の結果を保証するものではありません。<br>投資・税務・保険等の判断はご自身の責任で行い、必要に応じて専門家にご相談ください。</p>
+    <p class="disclaimer">本ツールの計算結果は概算であり、将来の結果を保証するものではありません。<br>投資・税務・保険等の判断はご自身の責任で行い、必要に応じて専門家にご相談ください。</p>
 </div>
 
 </body>

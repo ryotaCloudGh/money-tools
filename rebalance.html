@@ -16,6 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"
             integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="common.css">
 
     <style>
         :root {
@@ -42,15 +43,6 @@
         .container { max-width: 900px; margin: 0 auto; }
 
         header { margin-bottom: 24px; }
-
-        .back-link {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-        .back-link:hover { text-decoration: underline; }
 
         h1 { font-size: 1.5rem; margin: 0 0 4px; }
 
@@ -156,7 +148,6 @@
 
         .total-amount { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
 
-        /* ── プリセット ── */
         .preset-section {
             margin-bottom: 20px;
             padding-bottom: 20px;
@@ -198,7 +189,6 @@
         .btn-preset .preset-desc { font-size: 0.72rem; color: var(--text-muted); }
         .btn-preset:hover .preset-desc { color: #065f46; }
 
-        /* ── グラフエリア ── */
         .charts-row {
             display: flex;
             align-items: center;
@@ -232,7 +222,7 @@
             font-weight: 700;
             flex-shrink: 0;
             line-height: 1;
-            padding-bottom: 24px; /* align with canvas center */
+            padding-bottom: 24px;
         }
 
         @media (max-width: 500px) {
@@ -261,7 +251,6 @@
             flex-shrink: 0;
         }
 
-        /* ── テーブル ── */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -281,7 +270,6 @@
         .diff-minus   { color: var(--info);   font-weight: 600; }
         .diff-neutral { color: var(--text-muted); }
 
-        /* ── アクションセクション ── */
         .section-title {
             font-size: 1rem;
             font-weight: 700;
@@ -322,52 +310,18 @@
             display: none;
             margin-bottom: 16px;
         }
-
-        footer {
-            margin-top: 40px;
-            border-top: 1px solid var(--border);
-            padding-top: 24px;
-            text-align: center;
-        }
-
-        .affiliate-links {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-
-        .aff-btn {
-            display: inline-block;
-            background: white;
-            border: 1.5px solid var(--accent);
-            color: var(--accent);
-            text-decoration: none;
-            padding: 10px 22px;
-            border-radius: 30px;
-            font-size: 0.875rem;
-            font-weight: 700;
-            transition: background 0.15s, color 0.15s;
-        }
-        .aff-btn:hover { background: var(--accent); color: white; }
-
-        .footer-copy { font-size: 0.75rem; color: var(--text-muted); }
-        .site-nav { position:sticky; top:0; z-index:100; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(249,250,251,0.88); border-bottom:1px solid rgba(229,231,235,0.8); height:48px; display:flex; align-items:center; gap:10px; padding:0 8px; margin-bottom:16px; }
-        .nav-logo { background:#0D1B2A; color:#FFD700; font-weight:800; font-size:0.7rem; letter-spacing:0.5px; padding:4px 8px; border-radius:6px; text-decoration:none; flex-shrink:0; }
-        .nav-sep { color:#e5e7eb; font-size:1rem; line-height:1; }
-        .nav-current { color:#1f2937; font-size:0.85rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     </style>
 </head>
 <body>
 
+<nav class="site-nav">
+    <a href="index.html" class="nav-logo">MD</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">資産リバランス計算機</span>
+</nav>
+
 <div class="container">
     <header>
-        <nav class="site-nav">
-            <a href="index.html" class="nav-logo">MD</a>
-            <span class="nav-sep">/</span>
-            <span class="nav-current">資産リバランス計算機</span>
-        </nav>
         <h1>資産リバランス計算機</h1>
         <p class="subtitle">目標比率と現在の保有額から、売買・追加投資の調整案を算出します</p>
     </header>
@@ -420,7 +374,6 @@
             目標比率の合計が100%でないため、結果は参考値です。
         </div>
 
-        <!-- As-Is / To-Be グラフ -->
         <div class="charts-row">
             <div class="chart-wrap">
                 <div class="chart-title">現状 (As-Is)</div>
@@ -438,7 +391,6 @@
         </div>
         <div id="chart-legend" class="chart-legend"></div>
 
-        <!-- 比較テーブル -->
         <div style="overflow-x:auto;">
             <table>
                 <thead>
@@ -463,331 +415,40 @@
         <div id="full-rebalance-actions"></div>
     </div>
 
-    <footer>
-        <div class="affiliate-links">
-            <a href="#AFFILIATE_URL_SBI" class="aff-btn">SBI証券で口座開設（無料）</a>
-            <a href="#AFFILIATE_URL_RAKUTEN" class="aff-btn">楽天証券で口座開設（無料）</a>
+    <div class="affiliate-section">
+        <p class="affiliate-label">SPONSORED</p>
+        <p class="affiliate-title">この結果をもとに、口座開設から始めよう</p>
+        <div class="affiliate-buttons">
+            <a href="#AFFILIATE_URL_SBI" target="_blank" rel="noopener" class="affiliate-btn affiliate-btn-sbi">SBI証券で口座開設（無料）→</a>
+            <a href="#AFFILIATE_URL_RAKUTEN" target="_blank" rel="noopener" class="affiliate-btn affiliate-btn-rakuten">楽天証券で口座開設（無料）→</a>
         </div>
-        <p class="footer-copy">&copy; 2026 Money Dash — money-dash.com</p>
-    </footer>
-</div>
-
-<script>
-    const PRESETS = [
-        {
-            name: 'GPIF',
-            assets: [
-                { name: '国内株式',   ratio: 25 },
-                { name: '外国株式',   ratio: 25 },
-                { name: '国内債券',   ratio: 25 },
-                { name: '外国債券',   ratio: 25 },
-            ]
-        },
-        {
-            name: 'バフェット推奨',
-            assets: [
-                { name: '米国株式（S&P500）', ratio: 90 },
-                { name: '短期米国債',         ratio: 10 },
-            ]
-        },
-        {
-            name: 'オールウェザー（ダリオ）',
-            assets: [
-                { name: '米国株式',     ratio: 30 },
-                { name: '長期米国債',   ratio: 40 },
-                { name: '中期米国債',   ratio: 15 },
-                { name: 'ゴールド',     ratio: 7.5 },
-                { name: 'コモディティ', ratio: 7.5 },
-            ]
-        },
-        {
-            name: 'パーマネント（ブラウン）',
-            assets: [
-                { name: '株式',     ratio: 25 },
-                { name: '長期国債', ratio: 25 },
-                { name: '現金',     ratio: 25 },
-                { name: 'ゴールド', ratio: 25 },
-            ]
-        },
-    ];
-
-    function loadPreset(i) {
-        assets = PRESETS[i].assets.map(a => ({ ...a, value: 0 }));
-        renderInputs();
-        calculate();
-    }
-
-    const PALETTE = [
-        '#3b82f6', '#f59e0b', '#10b981', '#f43f5e',
-        '#8b5cf6', '#06b6d4', '#84cc16', '#fb923c'
-    ];
-
-    let assets = [
-        { name: '国内株式',   ratio: 50, value: 500000 },
-        { name: '先進国株式', ratio: 30, value: 250000 },
-        { name: '国内債券',   ratio: 10, value: 120000 },
-        { name: '現金',       ratio: 10, value: 130000 }
-    ];
-
-    let chartAsis = null;
-    let chartTobe = null;
-
-    function fmt(n) { return Math.round(n).toLocaleString() + '円'; }
-
-    function colors(n) { return Array.from({ length: n }, (_, i) => PALETTE[i % PALETTE.length]); }
-
-    // ── グラフ更新 ──────────────────────────────────────────
-    function updateCharts(totalValue) {
-        const labels   = assets.map(a => a.name);
-        const bgColors = colors(assets.length);
-
-        const asisData = assets.map(a =>
-            totalValue > 0 ? parseFloat((a.value / totalValue * 100).toFixed(2)) : 0
-        );
-        const tobeData = assets.map(a => a.ratio);
-
-        const commonOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '58%',
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`
-                    }
-                }
-            }
-        };
-
-        if (chartAsis) {
-            chartAsis.data.labels = labels;
-            chartAsis.data.datasets[0].data = asisData;
-            chartAsis.data.datasets[0].backgroundColor = bgColors;
-            chartAsis.update();
-        } else {
-            chartAsis = new Chart(document.getElementById('chart-asis'), {
-                type: 'doughnut',
-                data: {
-                    labels,
-                    datasets: [{ data: asisData, backgroundColor: bgColors, borderWidth: 2, borderColor: '#fff' }]
-                },
-                options: commonOptions
-            });
-        }
-
-        if (chartTobe) {
-            chartTobe.data.labels = labels;
-            chartTobe.data.datasets[0].data = tobeData;
-            chartTobe.data.datasets[0].backgroundColor = bgColors;
-            chartTobe.update();
-        } else {
-            chartTobe = new Chart(document.getElementById('chart-tobe'), {
-                type: 'doughnut',
-                data: {
-                    labels,
-                    datasets: [{ data: tobeData, backgroundColor: bgColors, borderWidth: 2, borderColor: '#fff' }]
-                },
-                options: commonOptions
-            });
-        }
-
-        // 凡例（両グラフ共通）
-        const legendEl = document.getElementById('chart-legend');
-        legendEl.innerHTML = labels.map((l, i) => `
-            <div class="legend-item">
-                <div class="legend-dot" style="background:${bgColors[i]}"></div>
-                <span>${l}</span>
-            </div>
-        `).join('');
-    }
-
-    // ── 入力描画 ────────────────────────────────────────────
-    function renderInputs() {
-        const container = document.getElementById('asset-inputs');
-        container.innerHTML = '';
-        assets.forEach((asset, i) => {
-            const row = document.createElement('div');
-            row.className = 'input-row';
-            row.innerHTML = `
-                <div class="col-name">
-                    ${i === 0 ? '<label>資産名</label>' : ''}
-                    <input type="text" value="${asset.name}" oninput="updateData(${i},'name',this.value)">
-                </div>
-                <div>
-                    ${i === 0 ? '<label>目標比率(%)</label>' : ''}
-                    <input type="number" value="${asset.ratio}" min="0" max="100"
-                           oninput="updateData(${i},'ratio',this.value)">
-                </div>
-                <div>
-                    ${i === 0 ? '<label>現在評価額(円)</label>' : ''}
-                    <input type="number" value="${asset.value}" min="0"
-                           oninput="updateData(${i},'value',this.value)">
-                </div>
-                <div class="col-del">
-                    <button class="btn-del" onclick="removeAssetRow(${i})" title="削除">✕</button>
-                </div>
-            `;
-            container.appendChild(row);
-        });
-    }
-
-    function addAssetRow() {
-        assets.push({ name: '新しい資産', ratio: 0, value: 0 });
-        renderInputs();
-        calculate();
-    }
-
-    function removeAssetRow(i) {
-        if (assets.length <= 1) return;
-        assets.splice(i, 1);
-        renderInputs();
-        calculate();
-    }
-
-    function updateData(i, field, value) {
-        assets[i][field] = field === 'name' ? value : Math.max(0, parseFloat(value) || 0);
-        calculate();
-    }
-
-    // ── 計算・描画 ──────────────────────────────────────────
-    function calculate() {
-        const investment = Math.max(0, parseFloat(document.getElementById('investment-amount').value) || 0);
-        const totalValue = assets.reduce((s, a) => s + a.value, 0);
-        const totalRatio = assets.reduce((s, a) => s + a.ratio, 0);
-        const newTotal   = totalValue + investment;
-        const ratioOk    = Math.abs(totalRatio - 100) < 0.01;
-
-        // 比率バッジ
-        const badge = document.getElementById('ratio-badge');
-        badge.textContent = totalRatio.toFixed(1).replace('.0', '') + '%';
-        badge.className = 'ratio-badge ' + (ratioOk ? 'ok' : 'warn');
-        document.getElementById('ratio-warning-text').style.display = ratioOk ? 'none' : 'inline';
-
-        // 結果エリア表示
-        document.getElementById('results').style.display = 'block';
-        document.getElementById('total-val-display').textContent = fmt(totalValue);
-        document.getElementById('ratio-mismatch-warning').style.display = ratioOk ? 'none' : 'block';
-
-        // グラフ更新（表示後に呼ぶ）
-        updateCharts(totalValue);
-
-        // 比較テーブル
-        const tbody = document.getElementById('comparison-table');
-        tbody.innerHTML = '';
-        assets.forEach((a, i) => {
-            const cur  = totalValue > 0 ? (a.value / totalValue) * 100 : 0;
-            const diff = cur - a.ratio;
-            let diffClass = 'diff-neutral';
-            if (diff > 0.05)  diffClass = 'diff-plus';
-            if (diff < -0.05) diffClass = 'diff-minus';
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>
-                    <span style="display:inline-block;width:10px;height:10px;border-radius:2px;
-                                 background:${PALETTE[i % PALETTE.length]};margin-right:6px;vertical-align:middle;"></span>
-                    ${a.name}
-                </td>
-                <td>${fmt(a.value)}</td>
-                <td>${cur.toFixed(1)}%</td>
-                <td>${a.ratio}%</td>
-                <td class="${diffClass}">${diff > 0.05 ? '+' : ''}${diff.toFixed(1)}%</td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-        // ── 完全調整案 ──
-        const fullEl = document.getElementById('full-rebalance-actions');
-        fullEl.innerHTML = '';
-        let hasAction = false;
-        assets.forEach(a => {
-            const ideal = newTotal * (a.ratio / 100);
-            const diff  = ideal - a.value;
-            if (Math.abs(diff) < 1) return;
-            hasAction = true;
-            const item = document.createElement('div');
-            item.className = 'action-item';
-            const cls  = diff > 0 ? 'action-buy' : 'action-sell';
-            const verb = diff > 0 ? '購入' : '売却';
-            item.innerHTML = `
-                <div>
-                    <div class="action-name">${a.name}</div>
-                    <div class="action-sub">目標額: ${fmt(ideal)}</div>
-                </div>
-                <span class="${cls}">${verb} ${fmt(Math.abs(diff))}</span>
-            `;
-            fullEl.appendChild(item);
-        });
-        if (!hasAction) {
-            fullEl.innerHTML = '<p class="empty-msg">すでに目標比率に達しています。売買不要です。</p>';
-        }
-
-        // ── ノーセル案 ──
-        const noSellEl = document.getElementById('no-sell-actions');
-        noSellEl.innerHTML = '';
-
-        if (investment <= 0) {
-            noSellEl.innerHTML = '<p class="empty-msg">追加投資額を入力すると配分案を表示します。</p>';
-            return;
-        }
-
-        const deficits = assets
-            .map((a, i) => ({ i, name: a.name, gap: newTotal * (a.ratio / 100) - a.value, value: a.value }))
-            .filter(d => d.gap > 1);
-
-        if (deficits.length === 0) {
-            noSellEl.innerHTML = '<p class="empty-msg">全資産が目標比率を超えています。完全調整案をご確認ください。</p>';
-            return;
-        }
-
-        const totalDeficit = deficits.reduce((s, d) => s + d.gap, 0);
-        const allocatable  = Math.min(investment, totalDeficit);
-        const unallocated  = investment - allocatable;
-
-        deficits.forEach(d => {
-            const amount    = Math.round(allocatable * (d.gap / totalDeficit));
-            if (amount <= 0) return;
-            const postRatio = newTotal > 0 ? ((d.value + amount) / newTotal) * 100 : 0;
-            const item = document.createElement('div');
-            item.className = 'action-item';
-            item.innerHTML = `
-                <div>
-                    <div class="action-name">${d.name}</div>
-                    <div class="action-sub">追加後比率: ${postRatio.toFixed(1)}%（目標: ${assets[d.i].ratio}%）</div>
-                </div>
-                <span class="action-add">追加 ${fmt(amount)}</span>
-            `;
-            noSellEl.appendChild(item);
-        });
-
-        if (unallocated > 1) {
-            const note = document.createElement('p');
-            note.className = 'empty-msg';
-            note.style.marginTop = '8px';
-            note.textContent = `残り ${fmt(unallocated)} は全資産が目標比率を超えるため自動配分できません。完全調整案をご参照ください。`;
-            noSellEl.appendChild(note);
-        }
-    }
-
-    renderInputs();
-    calculate();
-</script>
-
-<div style="max-width:900px;margin:0 auto;padding:0 20px 32px;">
-<div style="padding:20px 0 16px;border-top:1px solid #e5e7eb;">
-    <p style="font-size:0.7rem;font-weight:700;color:#94a3b8;margin:0 0 12px;letter-spacing:0.08em;text-transform:uppercase;">関連ツール</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
-        <a href="dividend-portfolio.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
-            <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">💹</span>
-            <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">配当ポートフォリオ計算機</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">銘柄ごとの配当を集計・目標月収を算出</div></div>
-        </a>
-        <a href="nisa.html" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
-            <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">📈</span>
-            <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">新NISA運用シミュレーター</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">1,800万非課税枠の複利効果を可視化</div></div>
-        </a>
+        <p class="affiliate-note">※ 当サイトはアフィリエイト広告を利用しています</p>
     </div>
 </div>
-<p style="font-size:0.75rem;color:#64748b;text-align:center;line-height:1.6;margin:0;">本ツールの計算結果は概算であり、将来の結果を保証するものではありません。<br>投資・税務・保険等の判断はご自身の責任で行い、必要に応じて専門家にご相談ください。</p>
+
+<script src="rebalance.js"></script>
+
+<div class="related-tools-wrap" style="max-width:900px;">
+    <div class="related-tools-inner">
+        <p class="related-tools-title">関連ツール</p>
+        <div class="related-tools-grid">
+            <a href="dividend-portfolio.html" class="related-tool-card">
+                <span class="related-tool-icon">💹</span>
+                <div>
+                    <div class="related-tool-name">配当ポートフォリオ計算機</div>
+                    <div class="related-tool-desc">銘柄ごとの配当を集計・目標月収を算出</div>
+                </div>
+            </a>
+            <a href="nisa.html" class="related-tool-card">
+                <span class="related-tool-icon">📈</span>
+                <div>
+                    <div class="related-tool-name">新NISA運用シミュレーター</div>
+                    <div class="related-tool-desc">1,800万非課税枠の複利効果を可視化</div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <p class="disclaimer">本ツールの計算結果は概算であり、将来の結果を保証するものではありません。<br>投資・税務・保険等の判断はご自身の責任で行い、必要に応じて専門家にご相談ください。</p>
 </div>
 
 </body>

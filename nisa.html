@@ -12,6 +12,8 @@
       gtag('js', new Date());
       gtag('config', 'G-4P1NTQCQPX');
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="common.css">
     <style>
         :root {
             --primary: #059669;
@@ -35,15 +37,6 @@
         }
 
         .container { max-width: 1000px; margin: 0 auto; }
-
-        .back-link {
-            display: inline-block;
-            text-decoration: none;
-            color: var(--text-sub);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-        .back-link:hover { color: var(--primary); }
 
         .header-area { margin-bottom: 24px; }
         .header-area h1 { font-size: 1.8rem; margin-bottom: 8px; }
@@ -148,50 +141,23 @@
         .info-item { background: var(--bg); border-radius: 14px; padding: 16px; }
         .info-item-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
         .info-item-body { font-size: 0.82rem; color: var(--text-sub); line-height: 1.5; }
-
-        .cta-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-        .cta-button {
-            display: block;
-            text-align: center;
-            padding: 16px;
-            border-radius: 12px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            background: linear-gradient(135deg, #059669, #10b981);
-            transition: opacity 0.2s;
-        }
-        .cta-button:hover { opacity: 0.9; }
-
-        .disclaimer {
-            font-size: 0.75rem;
-            color: var(--text-sub);
-            line-height: 1.5;
-            text-align: center;
-            padding-bottom: 20px;
-        }
-        .site-nav { position:sticky; top:0; z-index:100; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(248,250,252,0.82); border-bottom:1px solid rgba(226,232,240,0.7); height:48px; display:flex; align-items:center; gap:10px; padding:0 8px; margin-bottom:20px; }
-        .nav-logo { background:#0D1B2A; color:#FFD700; font-weight:800; font-size:0.7rem; letter-spacing:0.5px; padding:4px 8px; border-radius:6px; text-decoration:none; flex-shrink:0; }
-        .nav-sep { color:#e2e8f0; font-size:1rem; line-height:1; }
-        .nav-current { color:#1e293b; font-size:0.85rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     </style>
 </head>
 <body>
-<div class="container">
-    <nav class="site-nav">
-        <a href="index.html" class="nav-logo">MD</a>
-        <span class="nav-sep">/</span>
-        <span class="nav-current">新NISA運用シミュレーター</span>
-    </nav>
 
+<nav class="site-nav">
+    <a href="index.html" class="nav-logo">MD</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-current">新NISA運用シミュレーター</span>
+</nav>
+
+<div class="container">
     <div class="header-area">
         <h1>新NISA 運用シミュレーター</h1>
         <p>2024年からの恒久化・無期限制度に対応。非課税の複利効果を課税口座と比較します。</p>
         <span class="badge">2024年新制度対応</span>
     </div>
 
-    <!-- シミュレーターの見方ガイド -->
     <div class="glass-card" style="padding: 20px; margin-bottom: 24px; border-left: 4px solid var(--secondary);">
         <p class="section-title" style="margin-bottom: 8px; font-size: 0.95rem;">📊 シミュレーターの計算ルール</p>
         <ul style="font-size: 0.85rem; color: var(--text-sub); list-style: none; padding-left: 4px;">
@@ -203,7 +169,6 @@
     </div>
 
     <div class="grid-layout">
-        <!-- 入力 -->
         <div class="glass-card">
             <div class="input-group">
                 <label for="monthly">月額積立額</label>
@@ -236,7 +201,6 @@
             <div id="error-msg" class="error-msg" style="display:none;"></div>
         </div>
 
-        <!-- 結果 -->
         <div class="glass-card">
             <div id="warning-msg" class="warning-msg" style="display:none;"></div>
             <div class="stats-grid">
@@ -263,7 +227,6 @@
         </div>
     </div>
 
-    <!-- 仕組み説明 -->
     <div class="glass-card">
         <div class="section-title">新NISAの仕組み</div>
         <div class="info-grid">
@@ -286,22 +249,36 @@
         </div>
     </div>
 
-    <!-- CTA -->
-    <div class="cta-container">
-        <a href="#AFFILIATE_URL_SBI" class="cta-button">SBI証券でNISAを始める</a>
-        <a href="#AFFILIATE_URL_RAKUTEN" class="cta-button" style="background: linear-gradient(135deg, #dc2626, #ef4444);">楽天証券でNISAを始める</a>
+    <div class="affiliate-section">
+        <p class="affiliate-label">SPONSORED</p>
+        <p class="affiliate-title">NISAを始めるなら証券口座から</p>
+        <div class="affiliate-buttons">
+            <a href="#AFFILIATE_URL_SBI" target="_blank" rel="noopener" class="affiliate-btn affiliate-btn-sbi">SBI証券でNISAを始める（無料）→</a>
+            <a href="#AFFILIATE_URL_RAKUTEN" target="_blank" rel="noopener" class="affiliate-btn affiliate-btn-rakuten">楽天証券でNISAを始める（無料）→</a>
+        </div>
+        <p class="affiliate-note">※ 当サイトはアフィリエイト広告を利用しています</p>
     </div>
+</div>
 
-    <div style="padding:20px 0 16px;border-top:1px solid #e2e8f0;margin-top:8px;">
-        <p style="font-size:0.7rem;font-weight:700;color:#94a3b8;margin:0 0 12px;letter-spacing:0.08em;text-transform:uppercase;">関連ツール</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
-            <a href="ideco.html" style="display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
-                <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">🏦</span>
-                <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">iDeCo節税シミュレーター</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">拠出額から年間節税額をリアルタイム計算</div></div>
+<script src="nisa.js"></script>
+
+<div class="related-tools-wrap" style="max-width:1000px;">
+    <div class="related-tools-inner">
+        <p class="related-tools-title">関連ツール</p>
+        <div class="related-tools-grid">
+            <a href="ideco.html" class="related-tool-card">
+                <span class="related-tool-icon">🏦</span>
+                <div>
+                    <div class="related-tool-name">iDeCo節税シミュレーター</div>
+                    <div class="related-tool-desc">拠出額から年間節税額をリアルタイム計算</div>
+                </div>
             </a>
-            <a href="fire-calculator.html" style="display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;text-decoration:none;color:inherit;" onmouseover="this.style.boxShadow='0 4px 12px rgba(37,99,235,0.1)'" onmouseout="this.style.boxShadow=''">
-                <span style="font-size:1.4rem;line-height:1;flex-shrink:0;">🔥</span>
-                <div><div style="font-weight:700;font-size:0.8rem;color:#1e293b;line-height:1.3;">FIREシミュレーター</div><div style="font-size:0.7rem;color:#64748b;margin-top:2px;">資産寿命をインフレ・税金込みで計算</div></div>
+            <a href="fire-calculator.html" class="related-tool-card">
+                <span class="related-tool-icon">🔥</span>
+                <div>
+                    <div class="related-tool-name">FIREシミュレーター</div>
+                    <div class="related-tool-desc">資産寿命をインフレ・税金込みで計算</div>
+                </div>
             </a>
         </div>
     </div>
@@ -310,267 +287,5 @@
     </p>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script>
-    const LIFETIME_LIMIT = 18000000;
-    const TAX_RATE = 0.20315;
-    const FRAME_LIMITS = { tsumitate: 100000, growth: 200000, both: 300000 };
-
-    let myChart = null;
-
-    function formatYen(num) {
-        const abs = Math.abs(Math.round(num));
-        if (abs >= 10000) {
-            return Math.round(num / 10000).toLocaleString('ja-JP') + '万円';
-        }
-        return Math.round(num).toLocaleString('ja-JP') + '円';
-    }
-
-    // 数値入力とスライダーを同期させる汎用関数
-    function syncInput(sourceId, targetId, isLabel = false) {
-        const source = document.getElementById(sourceId);
-        const target = document.getElementById(targetId);
-        if (isLabel) target.textContent = source.value;
-        else target.value = source.value;
-    }
-
-    // 選択した枠に応じて入力上限を更新する関数
-    function updateInputConstraints() {
-        const frame = document.getElementById('frame').value;
-        const limit = FRAME_LIMITS[frame];
-        const monthlyInput = document.getElementById('monthly');
-        const monthlyRange = document.getElementById('monthly-range');
-
-        monthlyInput.max = limit;
-        monthlyRange.max = limit;
-
-        if (parseInt(monthlyInput.value) > limit) {
-            monthlyInput.value = limit;
-            monthlyRange.value = limit;
-        }
-    }
-
-    function calculate() {
-        const monthly = parseFloat(document.getElementById('monthly').value) || 0;
-        const frame = document.getElementById('frame').value;
-        const years = parseInt(document.getElementById('years').value) || 1;
-        const annualRate = parseFloat(document.getElementById('rate').value) / 100;
-
-        const errorEl = document.getElementById('error-msg');
-        const warningEl = document.getElementById('warning-msg');
-        const frameLimit = FRAME_LIMITS[frame];
-
-        // 新NISAの制度上限
-        const LIFETIME_TOTAL_LIMIT = 18000000;
-        const LIFETIME_GROWTH_LIMIT = 12000000;
-
-        if (monthly > frameLimit) {
-            errorEl.textContent = `選択した枠の月額上限は ${formatYen(frameLimit)} です。`;
-            errorEl.style.display = 'block';
-            document.getElementById('stat-total').textContent = '—';
-            document.getElementById('stat-principal').textContent = '—';
-            document.getElementById('stat-profit').textContent = '—';
-            document.getElementById('stat-tax-saved').textContent = '—';
-            if (myChart) myChart.destroy();
-            return;
-        }
-        errorEl.style.display = 'none';
-
-        const monthlyRate = annualRate / 12;
-        const totalMonths = years * 12;
-
-        const labels = ['0年'];
-        const principalArr = [0];
-        const nisaArr = [0];
-        const taxedArr = [0];
-        const grossTaxableArr = [0]; // 課税口座の税引前評価額を記録
-
-        let nisaBalance = 0;
-        let taxedBalance = 0;
-        let nisaContributedTotal = 0;
-        let nisaContributedGrowth = 0;
-
-        // 毎月の枠ごとの配分（併用時はつみたて10万・成長20万を上限に振り分け）
-        let monthlyTsum = 0;
-        let monthlyGrowth = 0;
-        if (frame === 'tsumitate') {
-            monthlyTsum = monthly;
-        } else if (frame === 'growth') {
-            monthlyGrowth = monthly;
-        } else {
-            monthlyTsum = Math.min(monthly, 100000);
-            monthlyGrowth = monthly - monthlyTsum;
-        }
-
-        for (let m = 1; m <= totalMonths; m++) {
-            // 成長枠の積立可能額（1,200万枠と1,800万総枠のどちらか早い方で止まる）
-            let actualGrowth = Math.min(monthlyGrowth, LIFETIME_GROWTH_LIMIT - nisaContributedGrowth, LIFETIME_TOTAL_LIMIT - nisaContributedTotal);
-            // つみたて枠の積立可能額
-            let actualTsum = Math.min(monthlyTsum, LIFETIME_TOTAL_LIMIT - (nisaContributedTotal + actualGrowth));
-            
-            let contrib = actualGrowth + actualTsum;
-            nisaContributedTotal += contrib;
-            nisaContributedGrowth += actualGrowth;
-            
-            // NISAと課税口座を同じ拠出ルールで計算（公平な比較のため）
-            nisaBalance = nisaBalance * (1 + monthlyRate) + contrib;
-            taxedBalance = taxedBalance * (1 + monthlyRate) + contrib;
-
-            if (m % 12 === 0) {
-                const yr = m / 12;
-                labels.push(yr + '年');
-                // 投資元本（生涯投資枠1,800万に達した後は増えない）
-                principalArr.push(Math.round(nisaContributedTotal));
-                nisaArr.push(Math.round(nisaBalance));
-                grossTaxableArr.push(Math.round(taxedBalance));
-
-                // 課税口座：運用中は非課税だが、比較のため「売却時の手残り額」を算出
-                const currentProfit = Math.max(0, taxedBalance - nisaContributedTotal);
-                taxedArr.push(Math.round(nisaContributedTotal + currentProfit * (1 - TAX_RATE)));
-            }
-        }
-
-        const finalNisa = nisaArr[nisaArr.length - 1];
-        const finalPrincipal = Math.round(nisaContributedTotal);
-        const finalProfit = finalNisa - finalPrincipal;
-        const finalTaxed = taxedArr[taxedArr.length - 1];
-        const benefit = finalNisa - finalTaxed;
-        
-        document.getElementById('stat-total').textContent = formatYen(finalNisa);
-        document.getElementById('stat-principal').textContent = formatYen(finalPrincipal);
-        document.getElementById('stat-profit').textContent = formatYen(Math.max(0, finalProfit));
-        document.getElementById('stat-tax-saved').textContent = formatYen(Math.max(0, benefit));
-
-        // 生涯上限警告
-        const totalInvest = monthly * 12 * years;
-        const relevantLimit = (frame === 'growth') ? LIFETIME_GROWTH_LIMIT : LIFETIME_TOTAL_LIMIT;
-        if (totalInvest > relevantLimit) {
-            warningEl.textContent = `総投資予定額（${formatYen(totalInvest)}）が非課税限度額（${formatYen(relevantLimit)}）を超えます。超過分はNISA口座に入らず、運用のみ継続される計算です。`;
-            warningEl.style.display = 'block';
-        } else {
-            warningEl.style.display = 'none';
-        }
-
-        updateChart(labels, principalArr, nisaArr, taxedArr, grossTaxableArr);
-    }
-
-    function updateChart(labels, principal, nisa, taxed, grossTaxable) {
-        const ctx = document.getElementById('chart').getContext('2d');
-        if (myChart) myChart.destroy();
-
-        myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [
-                    {
-                        label: 'NISA資産（非課税手残り）',
-                        data: nisa,
-                        borderColor: '#059669', 
-                        backgroundColor: 'rgba(5,150,105,0.08)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 0,
-                        borderWidth: 2,
-                    },
-                    {
-                        label: '課税口座（売却時の手残り）', 
-                        data: taxed,
-                        borderColor: '#1e40af',
-                        borderDash: [5, 4],
-                        fill: false,
-                        tension: 0.3,
-                        pointRadius: 0,
-                        borderWidth: 2,
-                    },
-                    {
-                        label: '元本',
-                        data: principal,
-                        borderColor: '#94a3b8',
-                        borderDash: [3, 3],
-                        fill: false,
-                        tension: 0,
-                        pointRadius: 0,
-                        borderWidth: 1.5,
-                    },
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { boxWidth: 14, font: { size: 11 } }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: ctx => {
-                                let val = ctx.raw;
-                                let label = ` ${ctx.dataset.label}: ${formatYen(val)}`;
-                                
-                                if (ctx.dataset.label.includes('課税口座')) {
-                                    const idx = ctx.dataIndex;
-                                    if (grossTaxable[idx] && principal[idx]) {
-                                        const profit = Math.max(0, grossTaxable[idx] - principal[idx]);
-                                        const tax = profit * TAX_RATE;
-                                        if (tax > 0) {
-                                            label += ` (課税額: ${formatYen(tax)})`;
-                                        }
-                                    }
-                                } else if (ctx.dataset.label.includes('NISA')) {
-                                    label += ` (課税額: 0円)`;
-                                }
-                                return label;
-                            }
-                        },
-                        footer: (items) => { // ツールチップに補足説明を追加
-                            return '※ 課税口座は、その年に解約・売却したと仮定した場合の税引後の金額を表示しています。';
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: v => Math.round(v / 10000) + '万',
-                            font: { size: 11 }
-                        }
-                    },
-                    x: { ticks: { font: { size: 11 } } }
-                }
-            }
-        });
-    }
-
-    // Sync inputs and sliders
-    const monthlyInput = document.getElementById('monthly');
-    const monthlyRange = document.getElementById('monthly-range');
-    const yearsRange = document.getElementById('years');
-    const rateRange = document.getElementById('rate');
-
-    const inputs = [
-        { src: 'monthly', tgt: 'monthly-range' },
-        { src: 'monthly-range', tgt: 'monthly' },
-        { src: 'years', tgt: 'years-label', isLabel: true },
-        { src: 'rate', tgt: 'rate-label', isLabel: true }
-    ];
-
-    inputs.forEach(pair => {
-        document.getElementById(pair.src).addEventListener('input', () => {
-            syncInput(pair.src, pair.tgt, pair.isLabel);
-            calculate();
-        });
-    });
-
-    document.getElementById('frame').addEventListener('change', () => {
-        updateInputConstraints();
-        calculate();
-    });
-
-    updateInputConstraints();
-    calculate();
-</script>
 </body>
 </html>

@@ -13,6 +13,7 @@
       gtag('js', new Date());
       gtag('config', 'G-4P1NTQCQPX');
     </script>
+    <link rel="stylesheet" href="common.css">
     <style>
         :root {
             --primary: #2563eb;
@@ -36,7 +37,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -60,8 +61,20 @@
 
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr;
             gap: 20px;
+        }
+
+        @media (min-width: 540px) {
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .tools-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .tool-card {
