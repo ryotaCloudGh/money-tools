@@ -79,6 +79,7 @@ function calculate() {
     document.getElementById('needed-investment').innerText = Math.max(0, Math.round(neededAmount)).toLocaleString() + ' 円';
 
     updateChart(labels, dataValues);
+    setShareText('平均利回り ' + avgYield.toFixed(2) + '% のポートフォリオを作成！Money Dashで配当シミュレーション📈 #配当投資 #FIRE');
 }
 
 function updateChart(labels, data) {

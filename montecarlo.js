@@ -62,6 +62,7 @@ function runSimulation() {
     const successRate = ((successCount / iterations) * 100).toFixed(1);
     document.getElementById('successRateDisplay').textContent = `${successRate} %`;
     document.getElementById('successCountDisplay').textContent = `${successCount} / ${iterations} 回成功`;
+    setShareText('FIRE成功確率 ' + successRate + '%！モンテカルロシミュレーションで検証してみた🎲 #FIRE #資産形成');
 
     const labels = Array.from({length: years + 1}, (_, i) => `${i}年目`);
     const percentiles = [10, 50, 90].map(p => {

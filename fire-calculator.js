@@ -122,7 +122,9 @@ function update() {
 
     document.getElementById('res-target').innerText = Math.round(baseAnnualSpend * 25).toLocaleString() + '万';
     document.getElementById('res-proj').innerText = Math.round(assetsAtFire).toLocaleString() + '万';
-    document.getElementById('res-rate').innerText = ((assetsAtFire / (baseAnnualSpend * 25)) * 100).toFixed(1) + '%';
+    const rate = baseAnnualSpend > 0 ? ((assetsAtFire / (baseAnnualSpend * 25)) * 100).toFixed(1) : '0';
+    document.getElementById('res-rate').innerText = rate + '%';
+    setShareText('FIREまでの目標達成率 ' + rate + '%！Money Dashでシミュレーションしてみた🔥 #FIRE #資産形成');
 }
 
 loadFromLocal();

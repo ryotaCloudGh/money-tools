@@ -128,6 +128,7 @@ function calculate() {
     }
 
     updateChart(labels, principalArr, nisaArr, taxedArr, grossTaxableArr);
+    setShareText('新NISAを' + years + '年間運用シミュレーション！Money Dashで計算してみた💰 #新NISA #資産形成');
 }
 
 function updateChart(labels, principal, nisa, taxed, grossTaxable) {

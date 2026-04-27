@@ -37,6 +37,7 @@ function calculate() {
     document.getElementById('res_exp').innerText = Math.round(totalExp).toLocaleString() + ' 万円';
 
     updateChart(labels, coverageData);
+    setShareText('必要保障額を' + duration + '年分シミュレーション！保険を見直してみた🛡️ #生命保険 #家計管理');
 }
 
 function updateChart(labels, data) {

@@ -104,3 +104,28 @@
 
 /* ---- 免責 ---- */
 .disclaimer { font-size: 0.75rem; color: #64748b; text-align: center; line-height: 1.6; margin: 0; }
+
+/* ---- シェアボタン ---- */
+.share-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0 4px;
+    flex-wrap: wrap;
+}
+.share-label { font-size: 0.82rem; font-weight: 600; color: #64748b; }
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+.share-btn:hover { opacity: 0.82; }
+.share-btn-x { background: #000; color: #fff; }
+.share-btn-line { background: #06C755; color: #fff; }
+.share-note { font-size: 0.75rem; color: #94a3b8; }
+.share-privacy { flex-basis: 100%; font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }

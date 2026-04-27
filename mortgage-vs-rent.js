@@ -108,6 +108,10 @@ function calculate() {
         : '損益分岐点: 到達なし';
 
     updateCharts(labels, cumulativeBuyData, cumulativeRentData, annualDiffData, buyInvestData, rentInvestData);
+    const shareMsg = breakEvenYear
+        ? '購入vs賃貸の損益分岐点は約' + breakEvenYear + '年目！Money Dashで比較してみた🏠 #住宅購入 #賃貸'
+        : '購入vs賃貸シミュレーション！運用込みで徹底比較してみた🏠 #住宅購入 #賃貸';
+    setShareText(shareMsg);
 }
 
 function updateCharts(labels, cumBuy, cumRent, annualDiff, buyInvest, rentInvest) {

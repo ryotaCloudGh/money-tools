@@ -77,6 +77,7 @@ function calculate() {
     document.getElementById('res-monthly-actual').innerText = monthlyActual.toLocaleString();
 
     updateChart(years, yearlyIdec, annualSavings);
+    setShareText('iDeCoを' + years + '年間運用した節税シミュレーション！Money Dashで計算してみた💸 #iDeCo #節税');
 }
 
 function updateChart(years, yearlyContrib, yearlySavings) {

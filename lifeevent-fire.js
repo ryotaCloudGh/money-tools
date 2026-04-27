@@ -184,6 +184,7 @@ function runSimulation() {
 
     updateChart(labels, p10, p50, p90, inputs);
     updateImpactSummary(inputs, paths, simWith.successCount);
+    setShareText('ライフイベント込みのFIRE成功確率は' + rateWith.toFixed(1) + '%！Money Dashで検証してみた🎯 #FIRE #資産形成');
 }
 
 function updateImpactSummary(inputs, paths, baseSuccessCount) {
