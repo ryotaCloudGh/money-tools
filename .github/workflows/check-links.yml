@@ -37,3 +37,7 @@ jobs:
           \`\`\`
 
           > money-dash Link Checker による自動検知（毎週月曜実行）"
+
+      - name: Fail job if links are broken
+        if: steps.checker.outcome == 'failure'
+        run: exit 1
