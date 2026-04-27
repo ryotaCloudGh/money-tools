@@ -1,0 +1,39 @@
+name: Link Checker
+
+on:
+  schedule:
+    - cron: '0 1 * * 1'  # 毎週月曜 AM10:00 JST (UTC 01:00)
+  workflow_dispatch:       # 手動実行も可
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check all links
+        id: checker
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 .github/scripts/check_links.py 2>&1 | tee /tmp/link-check.txt
+          exit ${PIPESTATUS[0]}
+
+      - name: Open GitHub Issue on failure
+        if: steps.checker.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BODY=$(cat /tmp/link-check.txt)
+          gh issue create \
+            --title "⚠️ リンク切れ検知 $(date +'%Y-%m-%d')" \
+            --body "## 自動リンクチェック結果
+
+          \`\`\`
+          ${BODY}
+          \`\`\`
+
+          > money-dash Link Checker による自動検知（毎週月曜実行）"
