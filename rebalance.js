@@ -241,6 +241,8 @@ function calculate() {
     const noSellEl = document.getElementById('no-sell-actions');
     noSellEl.innerHTML = '';
 
+    setShareText('ポートフォリオのリバランスをシミュレーション！資産配分を最適化してみた⚖️ #資産配分 #投資');
+
     if (investment <= 0) {
         noSellEl.innerHTML = '<p class="empty-msg">追加投資額を入力すると配分案を表示します。</p>';
         return;
@@ -282,8 +284,6 @@ function calculate() {
         note.textContent = `残り ${fmt(unallocated)} は全資産が目標比率を超えるため自動配分できません。完全調整案をご参照ください。`;
         noSellEl.appendChild(note);
     }
-
-    setShareText('ポートフォリオのリバランスをシミュレーション！資産配分を最適化してみた⚖️ #資産配分 #投資');
 }
 
 renderInputs();
