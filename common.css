@@ -52,10 +52,8 @@
 }
 .affiliate-label { margin: 0 0 4px; font-size: 0.75rem; font-weight: 700; color: #64748b; letter-spacing: 0.05em; }
 .affiliate-title { margin: 0 0 16px; font-size: 0.95rem; font-weight: 600; color: #1e293b; }
-.affiliate-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+.affiliate-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .affiliate-btn {
-    flex: 1 1 calc(50% - 6px);
-    min-width: 0;
     display: block;
     padding: 14px 20px;
     color: white;
