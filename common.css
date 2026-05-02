@@ -54,8 +54,8 @@
 .affiliate-title { margin: 0 0 16px; font-size: 0.95rem; font-weight: 600; color: #1e293b; }
 .affiliate-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
 .affiliate-btn {
-    flex: 1;
-    min-width: 200px;
+    flex: 1 1 calc(50% - 6px);
+    min-width: 0;
     display: block;
     padding: 14px 20px;
     color: white;
@@ -70,6 +70,9 @@
 .affiliate-btn-dmm { background: #e60012; }
 .affiliate-btn-tossy { background: #FF1493; }
 .affiliate-note { margin: 12px 0 0; font-size: 0.75rem; color: #94a3b8; }
+.affiliate-sister { margin: 4px 0 0; font-size: 0.75rem; color: #94a3b8; }
+.affiliate-sister a { color: #94a3b8; text-decoration: none; }
+.affiliate-sister a:hover { text-decoration: underline; }
 
 /* ---- 関連ツールセクション ---- */
 .related-tools-wrap { margin: 0 auto; padding: 0 20px 32px; }
