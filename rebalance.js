@@ -48,10 +48,10 @@ const PALETTE = [
 ];
 
 let assets = [
-    { name: '国内株式',   ratio: 50, value: 500000 },
-    { name: '先進国株式', ratio: 30, value: 250000 },
-    { name: '国内債券',   ratio: 10, value: 120000 },
-    { name: '現金',       ratio: 10, value: 130000 }
+    { name: '国内株式',   ratio: 50, value: 1500000 },
+    { name: '先進国株式', ratio: 30, value:  900000 },
+    { name: '国内債券',   ratio: 10, value:  300000 },
+    { name: '現金',       ratio: 10, value:  300000 }
 ];
 
 let chartAsis = null;
